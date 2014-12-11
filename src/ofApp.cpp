@@ -51,7 +51,7 @@ void ofApp::update() {
     memset(audioData,0,numOfBands*sizeof(float));
     fft.getFftData(audioData, numOfBands);
 
-    for(int i=0; i<numOfBands; i++) {
+    for(int i=5; i<numOfBands; i++) {
         float audioValue = audioData[i];
         if (audioValue > 0.1f) {
             //add particle!
@@ -94,7 +94,9 @@ void ofApp::addParticle(float force)
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+    if(key == 'f') {
+        ofToggleFullscreen();
+    }
 }
 
 //--------------------------------------------------------------
