@@ -56,7 +56,7 @@ void ofApp::update() {
     fft.getFftData(audioData, numOfBands);
 
     bool doRotate = true;
-    for(int i=0; i<numOfBands; i++) {
+    for(int i=3; i<numOfBands; i++) {
         float audioValue = audioData[i];
         if (audioValue > 0.5f) {
             //add particle!
@@ -113,6 +113,7 @@ void ofApp::addParticle(float force)
 }
 
 //--------------------------------------------------------------
+<<<<<<< HEAD
 void ofApp::setupParticles()
 {
 	if(ofGetGLProgrammableRenderer()){
