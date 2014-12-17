@@ -14,7 +14,8 @@ void ofApp::setup() {
     ofSetVerticalSync(true);
     ofSeedRandom(ofGetUnixTime());
     ofEnableAntiAliasing();
-    ofSetSphereResolution(12);
+    //ofSetSphereResolution(12);
+    //ofEnableDepthTest();
 
     audioThreshold.set("audioThreshold", 1.0, 0.0, 1.0);
     audioPeakDecay.set("audioPeakDecay", 0.915, 0.0, 1.0);
@@ -27,7 +28,7 @@ void ofApp::setup() {
     fft.setBufferSize(numOfBands);
     fft.setup();
 
-
+    bDrawGui = true;
     string guiPath = "audio.xml";
     gui.setup("audio", guiPath, 20, 20);
     gui.add(audioThreshold);
@@ -35,6 +36,9 @@ void ofApp::setup() {
     gui.add(audioMaxDecay);
     gui.add(audioMirror);
     //gui.loadFromFile(guiPath);
+
+    setupParticles();
+    rotation = 0.0f;
 
 }
 
@@ -51,37 +55,53 @@ void ofApp::update() {
     memset(audioData,0,numOfBands*sizeof(float));
     fft.getFftData(audioData, numOfBands);
 
+    bool doRotate = true;
     for(int i=0; i<numOfBands; i++) {
         float audioValue = audioData[i];
-        if (audioValue > 0.1f) {
+        if (audioValue > 0.5f) {
             //add particle!
             addParticle(audioValue);
+            rotation -= audioValue;
+            doRotate = false;
         }
     }
 
     particleSystem.update();
     particleSystem.resetForces();
 
+    if(doRotate) rotation *= 0.99f;
 }
 
 //--------------------------------------------------------------
 void ofApp::draw() {
-    ofSetColor(255);
-
-    int w = OFX_FFT_WIDTH;
-    int h = OFX_FFT_HEIGHT;
-    int x = 20;
-    int y = ofGetHeight() - h - 20;
-    fft.draw(x, y, w, h);
-
-    ofSetColor(255);
 
     cam.begin();
-    //meshWarped.drawWireframe();
-    	particleSystem.draw();
+
+	billboardShader.begin();
+	ofEnablePointSprites(); // not needed for GL3/4
+	texture.getTexture().bind();
+    particleSystem.draw();
+	texture.getTexture().unbind();
+	ofDisablePointSprites(); // not needed for GL3/4
+	billboardShader.end();
+
+    cam.orbit(rotation,0,500,ofVec3f(0,0,0));
+
     cam.end();
 
-    gui.draw();
+    if(bDrawGui) {
+        ofSetColor(255);
+
+        int w = OFX_FFT_WIDTH;
+        int h = OFX_FFT_HEIGHT;
+        int x = 20;
+        int y = ofGetHeight() - h - 20;
+        fft.draw(x, y, w, h);
+
+        ofSetColor(255);
+
+        gui.draw();
+    }
 }
 
 //--------------------------------------------------------------
@@ -93,8 +113,26 @@ void ofApp::addParticle(float force)
 }
 
 //--------------------------------------------------------------
-void ofApp::keyPressed(int key){
+void ofApp::setupParticles()
+{
+	if(ofGetGLProgrammableRenderer()){
+		billboardShader.load("shadersGL3/Billboard");
+	}else{
+		billboardShader.load("shadersGL2/Billboard");
+	}
 
+	// we need to disable ARB textures in order to use normalized texcoords
+	ofDisableArbTex();
+	texture.load("circle2.png");
+	ofEnableAlphaBlending();
+}
+
+//--------------------------------------------------------------
+void ofApp::keyPressed(int key){
+    if(key == 'f') {
+        ofToggleFullscreen();
+        bDrawGui = !bDrawGui;
+    }
 }
 
 //--------------------------------------------------------------

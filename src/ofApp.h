@@ -23,11 +23,13 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
 
+    void setupParticles();
     void addParticle(float force);
 
     ofxFFTLive fft;
     int numOfBands;
 
+    bool bDrawGui;
     ofxPanel gui;
     ofParameter<float> audioThreshold;
     ofParameter<float> audioPeakDecay;
@@ -41,6 +43,15 @@ public:
     float* audioData;
 
     ParticleSystem particleSystem;
+
+    ParticleSystem spriteSystem;
+
+    ofShader billboardShader;
+    ofImage texture;
+
+    float   rotation;
+
+
 
 
 };

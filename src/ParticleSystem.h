@@ -2,23 +2,27 @@
 
 #include "Particle.h"
 
-class ParticleSystem {
-protected:
-	float timeStep;
-	vector<Particle> particles;
+namespace {
+    inline bool DepthSortPredicate(const pair<int, float>& lhs, const pair<int, float>& rhs) {return lhs.second < rhs.second;}
+}
 
+class ParticleSystem {
 
 public:
 	ParticleSystem();
-
-	void setTimeStep(float timeStep);
-
-	void add(Particle& p);
 	unsigned size() const;
 	Particle& operator[](unsigned i);
 
 	void resetForces();
-
+	void setTimeStep(float timeStep);
+	void add(Particle& p);
 	void update();
 	void draw();
+
+protected:
+	float timeStep;
+	vector<Particle> particles;
+
+    ofVboMesh billboards;
+
 };
