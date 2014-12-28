@@ -16,6 +16,7 @@ void ofApp::setup() {
     ofEnableAntiAliasing();
     //ofSetSphereResolution(12);
     //ofEnableDepthTest();
+    //ofSoundStreamListDevices();
 
     audioThreshold.set("audioThreshold", 1.0, 0.0, 1.0);
     audioPeakDecay.set("audioPeakDecay", 0.915, 0.0, 1.0);
@@ -26,7 +27,7 @@ void ofApp::setup() {
     audioData = new float[numOfBands];
 
     fft.setBufferSize(numOfBands);
-    fft.setup();
+    fft.setup(10);
 
     bDrawGui = true;
     string guiPath = "audio.xml";
@@ -56,7 +57,7 @@ void ofApp::update() {
     fft.getFftData(audioData, numOfBands);
 
     bool doRotate = true;
-    for(int i=3; i<numOfBands; i++) {
+    for(int i=5; i<numOfBands; i++) {
         float audioValue = audioData[i];
         if (audioValue > 0.5f) {
             //add particle!
@@ -123,6 +124,7 @@ void ofApp::setupParticles()
 
 	// we need to disable ARB textures in order to use normalized texcoords
 	ofDisableArbTex();
+	texture.getTextureReference().enableMipmap();
 	texture.load("circle2.png");
 	ofEnableAlphaBlending();
 }
