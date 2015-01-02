@@ -113,7 +113,6 @@ void ofApp::addParticle(float force)
 }
 
 //--------------------------------------------------------------
-<<<<<<< HEAD
 void ofApp::setupParticles()
 {
 	if(ofGetGLProgrammableRenderer()){
