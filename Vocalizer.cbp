@@ -6,7 +6,7 @@
 		<Option makefile_is_custom="1" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="addons/;src/;build config/;addons/ofxFFT/src/;addons/ofxGui/src/;addons/ofxFFT/libs/;" />
+		<Option virtualFolders="addons/;src/;build config/;addons/ofxFFT/src/;addons/ofxGui/src/;addons/ofxFFT/libs/;shaders/;shaders/GL2/;shaders/GL3/;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/$(PROJECT_NAME)_debug" prefix_auto="1" extension_auto="1" />
@@ -101,6 +101,18 @@
 		</Unit>
 		<Unit filename="../../../addons/ofxGui/src/ofxToggle.h">
 			<Option virtualFolder="addons/ofxGui/src" />
+		</Unit>
+		<Unit filename="bin/data/shadersGL2/Billboard.frag">
+			<Option virtualFolder="shaders/GL2/" />
+		</Unit>
+		<Unit filename="bin/data/shadersGL2/Billboard.vert">
+			<Option virtualFolder="shaders/GL2/" />
+		</Unit>
+		<Unit filename="bin/data/shadersGL3/Billboard.frag">
+			<Option virtualFolder="shaders/GL3/" />
+		</Unit>
+		<Unit filename="bin/data/shadersGL3/Billboard.vert">
+			<Option virtualFolder="shaders/GL3/" />
 		</Unit>
 		<Unit filename="config.make">
 			<Option virtualFolder="build config" />

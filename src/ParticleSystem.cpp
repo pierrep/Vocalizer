@@ -3,9 +3,9 @@
 ParticleSystem::ParticleSystem() :
     timeStep(0.5f)
 {
-    billboards.getVertices().reserve(1000);
-    billboards.getColors().reserve(1000);
-    billboards.getNormals().reserve(1000);
+//    billboards.getVertices().reserve(1000);
+//    billboards.getColors().reserve(1000);
+//    billboards.getNormals().reserve(1000);
 
    	billboards.setUsage( GL_DYNAMIC_DRAW );
 	billboards.setMode(OF_PRIMITIVE_POINTS);
@@ -48,25 +48,27 @@ void ParticleSystem::resetForces() {
 
 
 
-void ParticleSystem::update() {
+void ParticleSystem::update(ofCamera& cam) {
 
-//	list< pair<int, float> > depthList;
-//
-//	// put indexed points and z-values into the list
-//	for(int i = 0; i < particles.size(); i++) {
-//		depthList.push_back( make_pair(i, particles[i].pos.z) );
-//	}
-//
-//	// sort the list
-//	depthList.sort(DepthSortPredicate);
-//
-//	// iterate through list
-//	std::list<pair<int, float> >::iterator it;
+	list< pair<int, float> > depthList;
+
+	// put indexed points and z-values into the list
+	for(unsigned int i = 0; i < particles.size(); i++) {
+		depthList.push_back( make_pair(i, ofVec3f(particles[i].pos - cam.getPosition()).length() ));
+	}
+
+	// sort the list
+	depthList.sort(DepthSortPredicate);
+
+	//ofLog() << "start depth sort----------------------------------";
+	/// iterate through list
+	std::list<pair<int, float> >::iterator it;
 	int j = 0;
-//    for(it = depthList.begin(); it != depthList.end(); it++) {
+    for(it = depthList.begin(); it != depthList.end(); it++) {
 
-	for(int i = 0; i < particles.size(); i++) {
-	//int i = it->first;
+	//for(unsigned int i = 0; i < particles.size(); i++) {
+	int i = it->first;
+	//ofLog() << "depth=" << it->second << endl;
 		particles[i].update(timeStep);
 
 
@@ -74,26 +76,27 @@ void ParticleSystem::update() {
         billboards.getColors()[j] = particles[i].colour;
         billboards.setNormal(j,particles[i].scale);
 
-        if(particles[i].vel.length() > 1) {
-            Particle p = particles[i];
+        if(particles[j].vel.length() > 1) {
+            Particle p = particles[j];
             p.force = ofVec3f(0,0,0);
             p.scale = ofVec3f(5,0,0);
             add(p);
         }
 
-		if(particles[i].lifetime > 150) {
-            particles[i].colour.a *= 0.995f;
-            if(particles[i].colour.a < 0.1f) {
-            ///kill particle
-            particles.erase(particles.begin()+i);
-            int kNumParticles = particles.size();
-            billboards.getVertices().resize(kNumParticles);
-            billboards.getColors().resize(kNumParticles);
-            billboards.getNormals().resize(kNumParticles,ofVec3f(0));
+		if(particles[j].lifetime > 150) {
+            particles[j].colour.a *= 0.995f;
+            if(particles[j].colour.a < 0.1f) {
+                ///kill particle
+                particles.erase(particles.begin()+j);
+                int kNumParticles = particles.size();
+                billboards.getVertices().resize(kNumParticles);
+                billboards.getColors().resize(kNumParticles);
+                billboards.getNormals().resize(kNumParticles,ofVec3f(0));
             }
 		}
 		j++;
 	}
+	//ofLog() << "end depth sort----------------------------------";
 
 }
 

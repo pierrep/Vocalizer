@@ -14,9 +14,10 @@ void ofApp::setup() {
     ofSetVerticalSync(true);
     ofSeedRandom(ofGetUnixTime());
     ofEnableAntiAliasing();
+    ofLogToFile("myLogFile.txt", true);
     //ofSetSphereResolution(12);
     //ofEnableDepthTest();
-    //ofSoundStreamListDevices();
+    ofSoundStreamListDevices();
 
     audioThreshold.set("audioThreshold", 1.0, 0.0, 1.0);
     audioPeakDecay.set("audioPeakDecay", 0.915, 0.0, 1.0);
@@ -27,7 +28,8 @@ void ofApp::setup() {
     audioData = new float[numOfBands];
 
     fft.setBufferSize(numOfBands);
-    fft.setup(10);
+    //fft.setup(10);
+    fft.setup();
 
     bDrawGui = true;
     string guiPath = "audio.xml";
@@ -67,7 +69,7 @@ void ofApp::update() {
         }
     }
 
-    particleSystem.update();
+    particleSystem.update(cam);
     particleSystem.resetForces();
 
     if(doRotate) rotation *= 0.99f;
@@ -124,7 +126,7 @@ void ofApp::setupParticles()
 
 	// we need to disable ARB textures in order to use normalized texcoords
 	ofDisableArbTex();
-	texture.getTextureReference().enableMipmap();
+	texture.getTexture().enableMipmap();
 	texture.load("circle2.png");
 	ofEnableAlphaBlending();
 }

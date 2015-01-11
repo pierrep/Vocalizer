@@ -3,7 +3,7 @@
 #include "Particle.h"
 
 namespace {
-    inline bool DepthSortPredicate(const pair<int, float>& lhs, const pair<int, float>& rhs) {return lhs.second < rhs.second;}
+    inline bool DepthSortPredicate(const pair<int, float>& lhs, const pair<int, float>& rhs) {return lhs.second > rhs.second;}
 }
 
 class ParticleSystem {
@@ -16,7 +16,7 @@ public:
 	void resetForces();
 	void setTimeStep(float timeStep);
 	void add(Particle& p);
-	void update();
+	void update(ofCamera& cam);
 	void draw();
 
 protected:
