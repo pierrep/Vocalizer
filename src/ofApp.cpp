@@ -47,32 +47,26 @@ void ofApp::setup() {
 
 //--------------------------------------------------------------
 void ofApp::update() {
-    ofSetWindowTitle(ofToString(ofGetFrameRate()));
 
-    fft.setThreshold(audioThreshold);
-    fft.setPeakDecay(audioPeakDecay);
-    fft.setMaxDecay(audioMaxDecay);
-    fft.setMirrorData(audioMirror);
-    fft.update();
-
-    memset(audioData,0,numOfBands*sizeof(float));
-    fft.getFftData(audioData, numOfBands);
+    updateFFT();
 
     bool doRotate = true;
+    float audioValue;
     for(int i=5; i<numOfBands; i++) {
-        float audioValue = audioData[i];
+        audioValue = audioData[i];
         if (audioValue > 0.5f) {
             //add particle!
-            addParticle(audioValue);
-            rotation -= audioValue;
+            particleSystem.addParticle(audioValue);
+            rotation += audioValue;
             doRotate = false;
+            rotFade = audioValue;
         }
     }
 
     particleSystem.update(cam);
     particleSystem.resetForces();
 
-    if(doRotate) rotation *= 0.99f;
+    if(doRotate) rotation = rotation + (rotFade*=0.95);
 }
 
 //--------------------------------------------------------------
@@ -92,27 +86,11 @@ void ofApp::draw() {
 
     cam.end();
 
+    ofSetColor(255,255,255);
+    ofDrawBitmapString(ofToString(ofGetFrameRate()),20,20);
     if(bDrawGui) {
-        ofSetColor(255);
-
-        int w = OFX_FFT_WIDTH;
-        int h = OFX_FFT_HEIGHT;
-        int x = 20;
-        int y = ofGetHeight() - h - 20;
-        fft.draw(x, y, w, h);
-
-        ofSetColor(255);
-
-        gui.draw();
+            drawGUI();
     }
-}
-
-//--------------------------------------------------------------
-void ofApp::addParticle(float force)
-{
-    float kGamma = 100.0f;
-    Particle particle(ofVec3f::zero(),ofVec3f(ofRandomf()*kGamma*force, ofRandomf()*kGamma*force, ofRandomf()*kGamma*force) );
-    particleSystem.add(particle);
 }
 
 //--------------------------------------------------------------
@@ -127,7 +105,7 @@ void ofApp::setupParticles()
 	// we need to disable ARB textures in order to use normalized texcoords
 	ofDisableArbTex();
 	texture.getTexture().enableMipmap();
-	texture.load("circle2.png");
+	texture.load("circle3.png");
 	ofEnableAlphaBlending();
 }
 
@@ -137,8 +115,35 @@ void ofApp::keyPressed(int key){
         ofToggleFullscreen();
         bDrawGui = !bDrawGui;
     }
+    if(key == 'g') {
+        bDrawGui = !bDrawGui;
+    }
 }
 
+//--------------------------------------------------------------
+void ofApp::drawGUI() {
+        ofSetColor(255);
+        int w = OFX_FFT_WIDTH;
+        int h = OFX_FFT_HEIGHT;
+        int x = 20;
+        int y = ofGetHeight() - h - 20;
+        fft.draw(x, y, w, h);
+
+        ofSetColor(255);
+        gui.draw();
+}
+
+void ofApp::updateFFT()
+{
+    fft.setThreshold(audioThreshold);
+    fft.setPeakDecay(audioPeakDecay);
+    fft.setMaxDecay(audioMaxDecay);
+    fft.setMirrorData(audioMirror);
+    fft.update();
+
+    memset(audioData,0,numOfBands*sizeof(float));
+    fft.getFftData(audioData, numOfBands);
+}
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
 

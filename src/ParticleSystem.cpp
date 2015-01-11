@@ -17,7 +17,15 @@ void ParticleSystem::setTimeStep(float _timeStep)
 	timeStep = _timeStep;
 }
 
-void ParticleSystem::add(Particle& p) {
+void ParticleSystem::addParticle(float force) {
+    float kGamma = 100.0f;
+    Particle p(ofVec3f::zero(),ofVec3f(ofRandomf()*kGamma*force, ofRandomf()*kGamma*force, ofRandomf()*kGamma*force) );
+
+    addParticle(p);
+}
+
+void ParticleSystem::addParticle(Particle& p) {
+
 	particles.push_back(p);
 
 	int kNumParticles = particles.size();
@@ -49,54 +57,59 @@ void ParticleSystem::resetForces() {
 
 
 void ParticleSystem::update(ofCamera& cam) {
-
-	list< pair<int, float> > depthList;
-
-	// put indexed points and z-values into the list
 	for(unsigned int i = 0; i < particles.size(); i++) {
-		depthList.push_back( make_pair(i, ofVec3f(particles[i].pos - cam.getPosition()).length() ));
-	}
+		if(particles[i].lifetime > 150) {
+            particles[i].addForce((ofVec3f::zero() - particles[i].pos[0]) / 20.0f);
+            particles[i].scale *= 0.99f;
+            //particles[i].addForce(ofVec3f::zero());
 
-	// sort the list
-	depthList.sort(DepthSortPredicate);
-
-	//ofLog() << "start depth sort----------------------------------";
-	/// iterate through list
-	std::list<pair<int, float> >::iterator it;
-	int j = 0;
-    for(it = depthList.begin(); it != depthList.end(); it++) {
-
-	//for(unsigned int i = 0; i < particles.size(); i++) {
-	int i = it->first;
-	//ofLog() << "depth=" << it->second << endl;
-		particles[i].update(timeStep);
-
-
-        billboards.getVertices()[j] = particles[i].pos;
-        billboards.getColors()[j] = particles[i].colour;
-        billboards.setNormal(j,particles[i].scale);
-
-        if(particles[j].vel.length() > 1) {
-            Particle p = particles[j];
-            p.force = ofVec3f(0,0,0);
-            p.scale = ofVec3f(5,0,0);
-            add(p);
-        }
-
-		if(particles[j].lifetime > 150) {
-            particles[j].colour.a *= 0.995f;
-            if(particles[j].colour.a < 0.1f) {
+            //particles[i].colour.a *= 0.995f;
+            //if(particles[i].colour.a < 0.1f)
+            if(particles[i].pos[0].distanceSquared(ofVec3f(0,0,0)) < 1.0f)
+            {
                 ///kill particle
-                particles.erase(particles.begin()+j);
+                particles.erase(particles.begin()+i);
                 int kNumParticles = particles.size();
                 billboards.getVertices().resize(kNumParticles);
                 billboards.getColors().resize(kNumParticles);
                 billboards.getNormals().resize(kNumParticles,ofVec3f(0));
             }
 		}
+	}
+
+    /* depth sorting */
+	list< pair<int, float> > depthList;
+
+	// put indexed points and z-values into the list
+	for(unsigned int i = 0; i < particles.size(); i++) {
+		depthList.push_back( make_pair(i, ofVec3f(particles[i].pos[0] - cam.getPosition()).length() ));
+	}
+
+	// sort the list
+	depthList.sort(DepthSortPredicate);
+
+	/// iterate through list
+	std::list<pair<int, float> >::iterator it;
+	int j = 0;
+    for(it = depthList.begin(); it != depthList.end(); it++) {
+
+
+	int i = it->first;
+		particles[i].update(timeStep);
+
+
+        billboards.getVertices()[j] = particles[i].pos[0];
+        billboards.getColors()[j] = particles[i].colour;
+        billboards.setNormal(j,particles[i].scale);
+
+//        if((particles[j].vel.length() > 1) && (particles[j].lifetime < 150)) {
+//            Particle p = particles[j];
+//            p.force = ofVec3f(0,0,0);
+//            p.scale = ofVec3f(5,0,0);
+//            addParticle(p);
+//        }
 		j++;
 	}
-	//ofLog() << "end depth sort----------------------------------";
 
 }
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Particle.h"
+#include "ofxTween.h"
 
 namespace {
     inline bool DepthSortPredicate(const pair<int, float>& lhs, const pair<int, float>& rhs) {return lhs.second > rhs.second;}
@@ -15,7 +16,8 @@ public:
 
 	void resetForces();
 	void setTimeStep(float timeStep);
-	void add(Particle& p);
+	void addParticle(float force);
+	void addParticle(Particle& p);
 	void update(ofCamera& cam);
 	void draw();
 

@@ -22,9 +22,10 @@ public:
     void windowResized(int w, int h);
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
+    void drawGUI();
+    void updateFFT();
 
     void setupParticles();
-    void addParticle(float force);
 
     ofxFFTLive fft;
     int numOfBands;
@@ -38,7 +39,7 @@ public:
 
     ofMesh meshOriginal;
     ofMesh meshWarped;
-    ofEasyCam cam;
+    ofCamera cam;
 
     float* audioData;
 
@@ -46,10 +47,11 @@ public:
 
     ParticleSystem spriteSystem;
 
-    ofShader billboardShader;
-    ofImage texture;
+    ofShader    billboardShader;
+    ofImage     texture;
 
-    float   rotation;
+    float       rotation;
+    float       rotFade;
 
 
 

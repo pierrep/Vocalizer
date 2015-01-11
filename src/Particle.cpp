@@ -2,7 +2,10 @@
 
 Particle::Particle(ofVec3f _pos, ofVec3f _force)
 {
-    pos.set(_pos);
+    trailLength = 20;
+
+	for( int i = 0; i < trailLength; i++ ) {		pos.push_back( _pos );	}
+    pos.push_back(_pos);
 	force.set(_force);
 	damping = 0.2f;
 	lifetime = 0;
@@ -14,7 +17,8 @@ Particle::Particle(ofVec3f _pos, ofVec3f _force)
 
 ///copy constructor
 Particle::Particle(const Particle &p) {
-    pos.set(p.pos);
+    trailLength = p.trailLength;
+	for( int i = 0; i < trailLength; i++ ) {        pos.push_back(p.pos[0]);	}
 	force.set(p.force);
 	damping = 0.2f;
 	lifetime = 0;
@@ -36,7 +40,7 @@ void Particle::update(float timeStep)
 	vel += force;
 
 	///update position
-	pos += vel * timeStep;
+	pos[0] += vel * timeStep;
 
 	lifetime += 1;
 
@@ -45,12 +49,4 @@ void Particle::update(float timeStep)
 void Particle::resetForce()
 {
 	force = ofVec3f::zero();
-}
-
-void Particle::draw()
-{
-	ofSetColor(colour);
-	ofDrawSphere(pos.x,pos.y,pos.z,10);
-
-	//glVertex3f(pos.x,pos.y,pos.z);
 }

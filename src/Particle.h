@@ -10,15 +10,16 @@ public:
     void update(float timeStep);
     void addForce(ofVec3f _force);
     void resetForce();
-    void draw();
 
-    ofVec3f pos;
+    vector<ofVec3f> pos;        // array of position vectors
 	ofVec3f vel;
 	ofVec3f force;
     float damping;
     float lifetime;
     ofVec3f scale;
     ofColor colour;
+
+    int trailLength;
 
 protected:
 
