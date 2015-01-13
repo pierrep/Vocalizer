@@ -47,8 +47,7 @@ public:
 
     ParticleSystem spriteSystem;
 
-    ofShader    billboardShader;
-    ofImage     texture;
+
 
     float       rotation;
     float       rotFade;

@@ -20,11 +20,16 @@ public:
 	void addParticle(Particle& p);
 	void update(ofCamera& cam);
 	void draw();
+	void renderTrails();
+	void depthSort(ofCamera& cam);
+	void eraseParticle(int i);
 
 protected:
 	float timeStep;
 	vector<Particle> particles;
 
     ofVboMesh billboards;
-
+    ofShader    billboardShader;
+    ofImage     sprite;
+    ofVboMesh   trails;
 };

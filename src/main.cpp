@@ -2,7 +2,7 @@
 #include "ofApp.h"
 #include "ofAppGlutWindow.h"
 
-#define USE_PROGRAMMABLE_RENDERER
+//#define USE_PROGRAMMABLE_RENDERER
 
 #ifdef USE_PROGRAMMABLE_RENDERER
 #include "ofGLProgrammableRenderer.h"
@@ -15,10 +15,10 @@ int main( ){
     ofSetCurrentRenderer(ofGLProgrammableRenderer::TYPE);
 #endif
 
-    //ofAppGlutWindow window;
+    ofAppGlutWindow window;
     //window.setGlutDisplayString("rgba double samples>=8 depth");
-	//ofSetupOpenGL(&window, 1024,768, OF_WINDOW);			// <-------- setup the GL context
-	ofSetupOpenGL(1024,768, OF_WINDOW);			// <-------- setup the GL context
+	ofSetupOpenGL(&window, 1024,768, OF_WINDOW);			// <-------- setup the GL context
+	//ofSetupOpenGL(1024,768, OF_WINDOW);			// <-------- setup the GL context
 
 	// this kicks off the running of my app
 	// can be OF_WINDOW or OF_FULLSCREEN

@@ -74,16 +74,9 @@ void ofApp::draw() {
 
     cam.begin();
 
-	billboardShader.begin();
-	ofEnablePointSprites(); // not needed for GL3/4
-	texture.getTexture().bind();
     particleSystem.draw();
-	texture.getTexture().unbind();
-	ofDisablePointSprites(); // not needed for GL3/4
-	billboardShader.end();
 
     cam.orbit(rotation,0,500,ofVec3f(0,0,0));
-
     cam.end();
 
     ofSetColor(255,255,255);
@@ -96,17 +89,7 @@ void ofApp::draw() {
 //--------------------------------------------------------------
 void ofApp::setupParticles()
 {
-	if(ofGetGLProgrammableRenderer()){
-		billboardShader.load("shadersGL3/Billboard");
-	}else{
-		billboardShader.load("shadersGL2/Billboard");
-	}
 
-	// we need to disable ARB textures in order to use normalized texcoords
-	ofDisableArbTex();
-	texture.getTexture().enableMipmap();
-	texture.load("circle3.png");
-	ofEnableAlphaBlending();
 }
 
 //--------------------------------------------------------------

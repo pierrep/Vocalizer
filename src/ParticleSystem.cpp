@@ -3,6 +3,19 @@
 ParticleSystem::ParticleSystem() :
     timeStep(0.5f)
 {
+	if(ofGetGLProgrammableRenderer()){
+		billboardShader.load("shadersGL3/Billboard");
+	}else{
+		billboardShader.load("shadersGL2/Billboard");
+	}
+
+	/// we need to disable ARB textures in order to use normalized texcoords
+    ofDisableArbTex();
+
+	sprite.getTexture().enableMipmap();
+	sprite.load("circle3.png");
+	ofEnableAlphaBlending();
+
 //    billboards.getVertices().reserve(1000);
 //    billboards.getColors().reserve(1000);
 //    billboards.getNormals().reserve(1000);
@@ -57,67 +70,91 @@ void ParticleSystem::resetForces() {
 
 
 void ParticleSystem::update(ofCamera& cam) {
-	for(unsigned int i = 0; i < particles.size(); i++) {
-		if(particles[i].lifetime > 150) {
-            particles[i].addForce((ofVec3f::zero() - particles[i].pos[0]) / 20.0f);
-            particles[i].scale *= 0.99f;
-            //particles[i].addForce(ofVec3f::zero());
 
-            //particles[i].colour.a *= 0.995f;
-            //if(particles[i].colour.a < 0.1f)
-            if(particles[i].pos[0].distanceSquared(ofVec3f(0,0,0)) < 1.0f)
+	for(unsigned int i = 0; i < particles.size(); i++) {
+        particles[i].update(timeStep);
+
+		if(particles[i].lifetime > 150) {
+            particles[i].addForce((ofVec3f::zero() - particles[i].pos) / 20.0f);
+            particles[i].scale *= 0.99f;
+
+            if(particles[i].pos.distanceSquared(ofVec3f(0,0,0)) < 1.0f)
             {
-                ///kill particle
-                particles.erase(particles.begin()+i);
-                int kNumParticles = particles.size();
-                billboards.getVertices().resize(kNumParticles);
-                billboards.getColors().resize(kNumParticles);
-                billboards.getNormals().resize(kNumParticles,ofVec3f(0));
+                eraseParticle(i);
             }
 		}
 	}
 
-    /* depth sorting */
-	list< pair<int, float> > depthList;
-
-	// put indexed points and z-values into the list
-	for(unsigned int i = 0; i < particles.size(); i++) {
-		depthList.push_back( make_pair(i, ofVec3f(particles[i].pos[0] - cam.getPosition()).length() ));
-	}
-
-	// sort the list
-	depthList.sort(DepthSortPredicate);
-
-	/// iterate through list
-	std::list<pair<int, float> >::iterator it;
-	int j = 0;
-    for(it = depthList.begin(); it != depthList.end(); it++) {
-
-
-	int i = it->first;
-		particles[i].update(timeStep);
-
-
-        billboards.getVertices()[j] = particles[i].pos[0];
-        billboards.getColors()[j] = particles[i].colour;
-        billboards.setNormal(j,particles[i].scale);
-
-//        if((particles[j].vel.length() > 1) && (particles[j].lifetime < 150)) {
-//            Particle p = particles[j];
-//            p.force = ofVec3f(0,0,0);
-//            p.scale = ofVec3f(5,0,0);
-//            addParticle(p);
-//        }
-		j++;
-	}
+    depthSort(cam);
 
 }
 
 void ParticleSystem::draw() {
 
-//	for(int i = 0; i < particles.size(); i++) {
-//		particles[i].draw();
-//	}
+	billboardShader.begin();
+	ofEnablePointSprites(); // not needed for GL3/4
+	sprite.getTexture().bind();
+
 	billboards.draw();
 
+	sprite.getTexture().unbind();
+	ofDisablePointSprites(); // not needed for GL3/4
+	billboardShader.end();
+
+	renderTrails();
+}
+
+void ParticleSystem::renderTrails()
+{
+	trails.clear();
+
+	for( vector<Particle>::iterator it = particles.begin(); it != particles.end(); ++it ) {
+		it->renderTrails(trails);
+	}
+	trails.setupIndicesAuto();
+
+//	billboardShader.begin();
+//	ofEnablePointSprites();
+
+    //trailImg.getTexture().bind();
+	trails.draw(OF_MESH_FILL);
+	//trailImg.getTexture().unbind();
+
+//	ofDisablePointSprites();
+//    billboardShader.end();
+}
+
+void ParticleSystem::depthSort(ofCamera& cam)
+{
+        /* depth sorting */
+	list< pair<int, float> > depthList;
+
+	// put indexed points and z-values into the list
+	for(unsigned int i = 0; i < particles.size(); i++) {
+		depthList.push_back( make_pair(i, ofVec3f(particles[i].pos - cam.getPosition()).length() ));
+	}
+
+	// sort the list
+	depthList.sort(DepthSortPredicate);
+
+	std::list<pair<int, float> >::iterator it;
+	int j = 0;
+    for(it = depthList.begin(); it != depthList.end(); it++) {
+
+	int i = it->first;
+        billboards.getVertices()[j] = particles[i].pos;
+        billboards.getColors()[j] = particles[i].colour;
+        billboards.setNormal(j,particles[i].scale);
+		j++;
+	}
+}
+
+void ParticleSystem::eraseParticle(int i)
+{
+    ///kill particle
+    particles.erase(particles.begin()+i);
+    int kNumParticles = particles.size();
+    billboards.getVertices().resize(kNumParticles);
+    billboards.getColors().resize(kNumParticles);
+    billboards.getNormals().resize(kNumParticles,ofVec3f(0));
 }
