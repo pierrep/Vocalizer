@@ -108,10 +108,22 @@
 		<Unit filename="bin/data/shadersGL2/Billboard.vert">
 			<Option virtualFolder="shaders/GL2/" />
 		</Unit>
+		<Unit filename="bin/data/shadersGL2/Trail.frag">
+			<Option virtualFolder="shaders/GL2/" />
+		</Unit>
+		<Unit filename="bin/data/shadersGL2/Trail.vert">
+			<Option virtualFolder="shaders/GL2/" />
+		</Unit>
 		<Unit filename="bin/data/shadersGL3/Billboard.frag">
 			<Option virtualFolder="shaders/GL3/" />
 		</Unit>
 		<Unit filename="bin/data/shadersGL3/Billboard.vert">
+			<Option virtualFolder="shaders/GL3/" />
+		</Unit>
+		<Unit filename="bin/data/shadersGL3/Trail.frag">
+			<Option virtualFolder="shaders/GL3/" />
+		</Unit>
+		<Unit filename="bin/data/shadersGL3/Trail.vert">
 			<Option virtualFolder="shaders/GL3/" />
 		</Unit>
 		<Unit filename="config.make">

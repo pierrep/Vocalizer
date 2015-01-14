@@ -39,7 +39,8 @@ public:
 
     ofMesh meshOriginal;
     ofMesh meshWarped;
-    ofCamera cam;
+    //ofCamera cam;
+    ofEasyCam cam;
 
     float* audioData;
 
@@ -48,6 +49,9 @@ public:
     ParticleSystem spriteSystem;
 
 
+    float       deltaTime;
+    double       prevTime;
+    double       curTime;
 
     float       rotation;
     float       rotFade;

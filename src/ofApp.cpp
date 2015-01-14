@@ -14,7 +14,7 @@ void ofApp::setup() {
     ofSetVerticalSync(true);
     ofSeedRandom(ofGetUnixTime());
     ofEnableAntiAliasing();
-    ofLogToFile("myLogFile.txt", true);
+    //ofLogToFile("myLogFile.txt", true);
     //ofSetSphereResolution(12);
     //ofEnableDepthTest();
     ofSoundStreamListDevices();
@@ -47,6 +47,10 @@ void ofApp::setup() {
 
 //--------------------------------------------------------------
 void ofApp::update() {
+    curTime = ofGetElapsedTimeMillis()/25.0f;
+    deltaTime = curTime - prevTime;
+    prevTime = curTime;
+
 
     updateFFT();
 
@@ -63,10 +67,13 @@ void ofApp::update() {
         }
     }
 
+    particleSystem.setTimeStep(deltaTime);
     particleSystem.update(cam);
     particleSystem.resetForces();
 
     if(doRotate) rotation = rotation + (rotFade*=0.95);
+
+    cout << "num particles = " << particleSystem.getNumParticles() << endl;
 }
 
 //--------------------------------------------------------------
@@ -76,7 +83,7 @@ void ofApp::draw() {
 
     particleSystem.draw();
 
-    cam.orbit(rotation,0,500,ofVec3f(0,0,0));
+    //cam.orbit(rotation,0,500,ofVec3f(0,0,0));
     cam.end();
 
     ofSetColor(255,255,255);

@@ -8,12 +8,14 @@ Particle::Particle(ofVec3f _pos, ofVec3f _force)
     pos = _pos;
 	force.set(_force);
 	damping = 0.2f;
-	lifetime = 0;
 	colour = ofColor(255.0f*ofRandomuf(),100,100);
-	scale = ofVec3f(1000,0,0)* 2.0f/force.length();
-	scale = ofVec3f(ofClamp(scale.x,5,70),0,0);
+	scale = ofVec3f(1000,0,0)* 5.0f/force.length();
+	scale = ofVec3f(ofClamp(scale.x,5,100),0,0);
+    lifetime = 150.0f;
 	vel = ofVec3f::zero();
 	trailType = TRAIL_TAIL;
+	bIsDead = false;
+    age         = 0;	ageRatio	= 1.0f;
 }
 
 ///copy constructor
@@ -22,15 +24,22 @@ Particle::Particle(const Particle &p) {
 	for( int i = 0; i < trailLength; i++ ) {        trailpos.push_back(p.pos);	}
 	force.set(p.force);
 	damping = 0.2f;
-	lifetime = 0;
+	lifetime = p.lifetime;
 	colour = p.colour;
 	scale = p.scale;
+	bIsDead = p.bIsDead;
+	age = p.age;
+	ageRatio = p.ageRatio;
+
+	trailType = p.trailType;
 }
 
 void Particle::addForce(ofVec3f _force)
 {
     force = _force;
 }
+
+void Particle::updateAge(){    age += 1.0f;	if( age > lifetime ) {		bIsDead = true;	}	else {		// When spawned, the ageRatio is 1.0.		// When death occurs, the ageRatio is 0.0.		ageRatio = 1.0f - age / (float)lifetime;	}}
 
 void Particle::update(float timeStep)
 {
@@ -45,7 +54,7 @@ void Particle::update(float timeStep)
 	///update position
 	pos += vel * timeStep;
 
-	lifetime += 1;
+	updateAge();
 
 }
 
@@ -56,10 +65,16 @@ void Particle::updateTrails()
         trailpos.insert(trailpos.begin(),pos);
     }
     else if(trailType == TRAIL_DOTS) {
-        if((vel.length() > 1) && (lifetime < 150)) {
+        if((vel.length() > 1) && !bIsDead) {
             trailpos.insert(trailpos.begin(),pos);
         }
     }
+}
+
+void Particle::renderTrailPoints(ofVboMesh& trails)
+{
+
+
 }
 
 void Particle::renderTrails(ofVboMesh& trails){
@@ -67,7 +82,8 @@ void Particle::renderTrails(ofVboMesh& trails){
         float per     = 1.0f - i / (float)(trailpos.size()-1);
 
 		ofVec3f perp0 = trailpos[i] - trailpos[i+1];
-		perp0.normalize();		ofVec3f perp1 = perp0.crossed( ofVec3f(0,1,0) );		ofVec3f perp2 = perp0.crossed( perp1 );		ofVec3f off = perp2 * 40.0f;//( radius * agePer * per * 0.1f );
+		perp0.normalize();		ofVec3f perp1 = perp0.crossed( ofVec3f(0,1,0) );		ofVec3f perp2 = perp0.crossed( perp1 );		ofVec3f off = perp2 * 10.0f;//( radius * agePer * per * 0.1f );
+		off = perp2 * scale.x * ageRatio * per * 0.1f;
 
         //ofFloatColor c = ofFloatColor(per, per, per,(per * 0.5f));
 //        ofFloatColor c = ofFloatColor(per, (per *0.25f), (1.0f - per),(per * 0.5f));

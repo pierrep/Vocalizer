@@ -5,8 +5,10 @@ ParticleSystem::ParticleSystem() :
 {
 	if(ofGetGLProgrammableRenderer()){
 		billboardShader.load("shadersGL3/Billboard");
+		trailShader.load("shadersGL3/Trail");
 	}else{
 		billboardShader.load("shadersGL2/Billboard");
+		trailShader.load("shadersGL2/Trail");
 	}
 
 	/// we need to disable ARB textures in order to use normalized texcoords
@@ -22,6 +24,9 @@ ParticleSystem::ParticleSystem() :
 
    	billboards.setUsage( GL_DYNAMIC_DRAW );
 	billboards.setMode(OF_PRIMITIVE_POINTS);
+
+    trails.setUsage( GL_DYNAMIC_DRAW );
+	trails.setMode(OF_PRIMITIVE_TRIANGLE_STRIP);
 
 }
 
@@ -74,15 +79,15 @@ void ParticleSystem::update(ofCamera& cam) {
 	for(unsigned int i = 0; i < particles.size(); i++) {
         particles[i].update(timeStep);
 
-		if(particles[i].lifetime > 150) {
-            particles[i].addForce((ofVec3f::zero() - particles[i].pos) / 20.0f);
-            particles[i].scale *= 0.99f;
-
-            if(particles[i].pos.distanceSquared(ofVec3f(0,0,0)) < 1.0f)
-            {
-                eraseParticle(i);
-            }
-		}
+//		if(particles[i].bIsDead) {
+//            particles[i].addForce((ofVec3f::zero() - particles[i].pos) / 20.0f);
+//            particles[i].scale *= 0.99f;
+//
+//            if(particles[i].pos.distanceSquared(ofVec3f(0,0,0)) < 1.0f)
+//            {
+//                eraseParticle(i);
+//            }
+//		}
 	}
 
     depthSort(cam);
@@ -113,7 +118,7 @@ void ParticleSystem::renderTrails()
 	}
 	trails.setupIndicesAuto();
 
-//	billboardShader.begin();
+//	trailShader.begin();
 //	ofEnablePointSprites();
 
     //trailImg.getTexture().bind();
@@ -121,7 +126,7 @@ void ParticleSystem::renderTrails()
 	//trailImg.getTexture().unbind();
 
 //	ofDisablePointSprites();
-//    billboardShader.end();
+  //  trailShader.end();
 }
 
 void ParticleSystem::depthSort(ofCamera& cam)
@@ -151,6 +156,7 @@ void ParticleSystem::depthSort(ofCamera& cam)
 
 void ParticleSystem::eraseParticle(int i)
 {
+    return;
     ///kill particle
     particles.erase(particles.begin()+i);
     int kNumParticles = particles.size();

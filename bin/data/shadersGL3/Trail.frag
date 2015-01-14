@@ -8,5 +8,5 @@ in vec2 texCoordVarying;
 out vec4 fragColor;
 
 void main (void) {
-	fragColor = texture(tex0, gl_PointCoord) * colorVarying;
+	fragColor = texture(tex0, texCoordVarying) * colorVarying;
 }

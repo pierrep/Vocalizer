@@ -23,6 +23,7 @@ public:
 	void renderTrails();
 	void depthSort(ofCamera& cam);
 	void eraseParticle(int i);
+	unsigned int getNumParticles() {return particles.size();}
 
 protected:
 	float timeStep;
@@ -30,6 +31,7 @@ protected:
 
     ofVboMesh billboards;
     ofShader    billboardShader;
+    ofShader    trailShader;
     ofImage     sprite;
     ofVboMesh   trails;
 };
