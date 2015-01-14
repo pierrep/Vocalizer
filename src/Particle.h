@@ -6,7 +6,7 @@ class Particle {
 public:
 
     Particle(ofVec3f _pos, ofVec3f _force);
-    Particle(const Particle &p);
+    //Particle(const Particle &p);
     void update(float timeStep);
     void updateAge();
     void addForce(ofVec3f _force);

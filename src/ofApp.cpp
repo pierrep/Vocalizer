@@ -14,7 +14,7 @@ void ofApp::setup() {
     ofSetVerticalSync(true);
     ofSeedRandom(ofGetUnixTime());
     ofEnableAntiAliasing();
-    //ofLogToFile("myLogFile.txt", true);
+    //ofLogToFile("myLogFile.txt", false);
     //ofSetSphereResolution(12);
     //ofEnableDepthTest();
     ofSoundStreamListDevices();
@@ -55,7 +55,7 @@ void ofApp::update() {
     updateFFT();
 
     bool doRotate = true;
-    float audioValue;
+    float audioValue = 0;
     for(int i=5; i<numOfBands; i++) {
         audioValue = audioData[i];
         if (audioValue > 0.5f) {
@@ -67,13 +67,21 @@ void ofApp::update() {
         }
     }
 
-    particleSystem.setTimeStep(deltaTime);
+    //particleSystem.setTimeStep(deltaTime);
     particleSystem.update(cam);
     particleSystem.resetForces();
 
     if(doRotate) rotation = rotation + (rotFade*=0.95);
 
-    cout << "num particles = " << particleSystem.getNumParticles() << endl;
+    int n = 0;
+    int d = 0;
+    for(int i = 0; i < particleSystem.getParticles().size();i++) {
+        if(!particleSystem.getParticles()[i].bIsDead) {
+            n++;
+        }
+        else d++;
+    }
+    //cout << "particles  alive: " << n << "  dead: " <<  d << "  total: " <<  particleSystem.getParticles().size() << "  num vertices: " << particleSystem.billboards.getNumVertices() << endl;
 }
 
 //--------------------------------------------------------------
@@ -83,7 +91,7 @@ void ofApp::draw() {
 
     particleSystem.draw();
 
-    //cam.orbit(rotation,0,500,ofVec3f(0,0,0));
+    cam.orbit(rotation,0,500,ofVec3f(0,0,0));
     cam.end();
 
     ofSetColor(255,255,255);

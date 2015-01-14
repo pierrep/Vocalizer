@@ -22,16 +22,19 @@ public:
 	void draw();
 	void renderTrails();
 	void depthSort(ofCamera& cam);
+	void noDepthSort(ofCamera& cam);
 	void eraseParticle(int i);
-	unsigned int getNumParticles() {return particles.size();}
+	vector<Particle>& getParticles() {return particles;}
 
+	    ofVboMesh billboards;
 protected:
 	float timeStep;
 	vector<Particle> particles;
 
-    ofVboMesh billboards;
+
     ofShader    billboardShader;
     ofShader    trailShader;
     ofImage     sprite;
     ofVboMesh   trails;
+
 };

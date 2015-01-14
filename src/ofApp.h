@@ -39,8 +39,8 @@ public:
 
     ofMesh meshOriginal;
     ofMesh meshWarped;
-    //ofCamera cam;
-    ofEasyCam cam;
+    ofCamera cam;
+    //ofEasyCam cam;
 
     float* audioData;
 
@@ -55,8 +55,5 @@ public:
 
     float       rotation;
     float       rotFade;
-
-
-
 
 };

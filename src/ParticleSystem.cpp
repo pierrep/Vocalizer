@@ -11,6 +11,8 @@ ParticleSystem::ParticleSystem() :
 		trailShader.load("shadersGL2/Trail");
 	}
 
+    particles.reserve(10000);
+
 	/// we need to disable ARB textures in order to use normalized texcoords
     ofDisableArbTex();
 
@@ -36,15 +38,15 @@ void ParticleSystem::setTimeStep(float _timeStep)
 }
 
 void ParticleSystem::addParticle(float force) {
+
     float kGamma = 100.0f;
-    Particle p(ofVec3f::zero(),ofVec3f(ofRandomf()*kGamma*force, ofRandomf()*kGamma*force, ofRandomf()*kGamma*force) );
+    ofVec3f r = ofVec3f(ofRandomf(),ofRandomf(),ofRandomf());
+    r.normalize();
+    //ofLog() << "addParticle --  force: " << force << " r:" << r;
+    Particle p(ofVec3f::zero(),r*kGamma*force);
 
-    addParticle(p);
-}
-
-void ParticleSystem::addParticle(Particle& p) {
-
-	particles.push_back(p);
+    //addParticle(p);
+    particles.push_back(p);
 
 	int kNumParticles = particles.size();
 	//cout << "num particles=" << kNumParticles << endl;
@@ -52,8 +54,17 @@ void ParticleSystem::addParticle(Particle& p) {
 	billboards.getColors().resize(kNumParticles);
 	billboards.getNormals().resize(kNumParticles,ofVec3f(0));
 
-	billboards.getColors()[kNumParticles-1].set(particles[kNumParticles-1].colour);
-	billboards.setNormal(kNumParticles-1,particles[kNumParticles-1].scale);
+	//ofLog() << "end addParticle";
+}
+
+void ParticleSystem::addParticle(Particle& p) {
+
+//    billboards.addVertex(ofVec3f::zero());
+//    billboards.addColor(ofFloatColor(0));
+//    billboards.addNormal(ofVec3f::zero());
+
+//	billboards.getColors()[kNumParticles-1].set(particles[kNumParticles-1].colour);
+//	billboards.setNormal(kNumParticles-1,particles[kNumParticles-1].scale);
 }
 
 unsigned ParticleSystem::size() const {
@@ -67,34 +78,44 @@ Particle& ParticleSystem::operator[](unsigned i) {
 
 
 void ParticleSystem::resetForces() {
-	int n = particles.size();
-	for(int i = 0; i < n; i++)
+	for(int i = 0; i < particles.size(); i++) {
 		particles[i].resetForce();
+	}
 }
 
 
 
 void ParticleSystem::update(ofCamera& cam) {
-
+//ofLog() << "update ----------------------------";
 	for(unsigned int i = 0; i < particles.size(); i++) {
-        particles[i].update(timeStep);
 
-//		if(particles[i].bIsDead) {
-//            particles[i].addForce((ofVec3f::zero() - particles[i].pos) / 20.0f);
-//            particles[i].scale *= 0.99f;
-//
-//            if(particles[i].pos.distanceSquared(ofVec3f(0,0,0)) < 1.0f)
-//            {
-//                eraseParticle(i);
-//            }
-//		}
+		if(particles[i].bIsDead) {
+            ofVec3f f = (ofVec3f::zero() - (particles[i].pos) / 20.0f);
+            particles[i].addForce(f);
+            //particles[i].scale *= 0.99f;
+
+            if(particles[i].pos.distanceSquared(ofVec3f(0,0,0)) < 1.0f)
+            {
+                eraseParticle(i);
+            } else {
+                particles[i].update(timeStep);
+            }
+		} else {
+            particles[i].update(timeStep);
+           // ofLog() << "Particle position: " << particles[i].pos << " Total particles:" << particles.size();
+		}
+
+
 	}
 
     depthSort(cam);
+    //noDepthSort(cam);
 
 }
 
 void ParticleSystem::draw() {
+
+	renderTrails();
 
 	billboardShader.begin();
 	ofEnablePointSprites(); // not needed for GL3/4
@@ -106,7 +127,6 @@ void ParticleSystem::draw() {
 	ofDisablePointSprites(); // not needed for GL3/4
 	billboardShader.end();
 
-	renderTrails();
 }
 
 void ParticleSystem::renderTrails()
@@ -127,6 +147,15 @@ void ParticleSystem::renderTrails()
 
 //	ofDisablePointSprites();
   //  trailShader.end();
+}
+
+void ParticleSystem::noDepthSort(ofCamera& cam)
+{
+	for(unsigned int i = 0; i < particles.size(); i++) {
+        billboards.getVertices()[i] = particles[i].pos;
+        billboards.getColors()[i] = particles[i].colour;
+        billboards.setNormal(i,particles[i].scale);
+	}
 }
 
 void ParticleSystem::depthSort(ofCamera& cam)
@@ -156,10 +185,13 @@ void ParticleSystem::depthSort(ofCamera& cam)
 
 void ParticleSystem::eraseParticle(int i)
 {
-    return;
     ///kill particle
+    //cout << "erase particle " << i << endl;
     particles.erase(particles.begin()+i);
     int kNumParticles = particles.size();
+//    billboards.removeVertex(i);
+//    billboards.removeColor(i);
+//    billboards.removeNormal(i);
     billboards.getVertices().resize(kNumParticles);
     billboards.getColors().resize(kNumParticles);
     billboards.getNormals().resize(kNumParticles,ofVec3f(0));

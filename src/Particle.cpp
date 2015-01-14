@@ -2,44 +2,50 @@
 
 Particle::Particle(ofVec3f _pos, ofVec3f _force)
 {
-    trailLength = 20;
-
-	for( int i = 0; i < trailLength; i++ ) {		trailpos.push_back( _pos );	}
     pos = _pos;
 	force.set(_force);
 	damping = 0.2f;
 	colour = ofColor(255.0f*ofRandomuf(),100,100);
-	scale = ofVec3f(1000,0,0)* 5.0f/force.length();
-	scale = ofVec3f(ofClamp(scale.x,5,100),0,0);
-    lifetime = 150.0f;
+	scale = ofVec3f(1000,0,0)* 2.0f/force.length();
+	scale = ofVec3f(ofClamp(scale.x,5,70),0,0);
+    lifetime = 100.0f;
 	vel = ofVec3f::zero();
 	trailType = TRAIL_TAIL;
 	bIsDead = false;
     age         = 0;	ageRatio	= 1.0f;
+
+    trailLength = 10.0f;
+
+	for( int i = 0; i < trailLength; i++ ) {		trailpos.push_back( _pos );	}
+	//ofLog() << "particle constructor";
 }
 
 ///copy constructor
-Particle::Particle(const Particle &p) {
-    trailLength = p.trailLength;
-	for( int i = 0; i < trailLength; i++ ) {        trailpos.push_back(p.pos);	}
-	force.set(p.force);
-	damping = 0.2f;
-	lifetime = p.lifetime;
-	colour = p.colour;
-	scale = p.scale;
-	bIsDead = p.bIsDead;
-	age = p.age;
-	ageRatio = p.ageRatio;
-
-	trailType = p.trailType;
-}
+//Particle::Particle(const Particle &p) {
+//
+//    trailLength = p.trailLength;
+////	for( int i = 0; i < trailLength; i++ ) {////        trailpos.push_back(p.pos);////
+//    trailpos = p.trailpos;
+//	force.set(p.force);
+//	damping = p.damping;
+//	lifetime = p.lifetime;
+//	colour = p.colour;
+//	scale = p.scale;
+//	bIsDead = p.bIsDead;
+//	age = p.age;
+//	ageRatio = p.ageRatio;
+//
+//	trailType = p.trailType;
+//
+//	//ofLog() << "particle copy constructor";
+//}
 
 void Particle::addForce(ofVec3f _force)
 {
     force = _force;
 }
 
-void Particle::updateAge(){    age += 1.0f;	if( age > lifetime ) {		bIsDead = true;	}	else {		// When spawned, the ageRatio is 1.0.		// When death occurs, the ageRatio is 0.0.		ageRatio = 1.0f - age / (float)lifetime;	}}
+void Particle::updateAge(){    age += 0.5f;	if( age > lifetime ) {		bIsDead = true;	}	else {		// When spawned, the ageRatio is 1.0.		// When death occurs, the ageRatio is 0.0.		ageRatio = 1.0f - age / (float)lifetime;	}}
 
 void Particle::update(float timeStep)
 {
@@ -85,9 +91,9 @@ void Particle::renderTrails(ofVboMesh& trails){
 		perp0.normalize();		ofVec3f perp1 = perp0.crossed( ofVec3f(0,1,0) );		ofVec3f perp2 = perp0.crossed( perp1 );		ofVec3f off = perp2 * 10.0f;//( radius * agePer * per * 0.1f );
 		off = perp2 * scale.x * ageRatio * per * 0.1f;
 
-        //ofFloatColor c = ofFloatColor(per, per, per,(per * 0.5f));
-//        ofFloatColor c = ofFloatColor(per, (per *0.25f), (1.0f - per),(per * 0.5f));
-        ofFloatColor c = ofFloatColor(255,0,0,255);
+        ofFloatColor c = ofFloatColor(per, per, per,(per ));
+        //ofFloatColor c = ofFloatColor(per, (per *0.25f), (1.0f - per),(per * 0.5f));
+        //ofFloatColor c = ofFloatColor(255,0,0,255);
 
 		ofVec3f pt = trailpos[i] - off;
         trails.addVertex(pt);
