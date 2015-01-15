@@ -11,6 +11,7 @@ public:
     void updateAge();
     void addForce(ofVec3f _force);
     void resetForce();
+    void calculatePerlin();
     void updateTrails();
     void renderTrails(ofVboMesh& trails);
     void renderTrailPoints(ofVboMesh& trails);
@@ -18,18 +19,22 @@ public:
     ofVec3f pos;        // array of position vectors
 	ofVec3f vel;
 	ofVec3f force;
+	ofVec3f perlin;
 	vector<ofVec3f> trailpos;
     float damping;
     float lifetime;
     float age;
     float ageRatio;
     bool bIsDead;
-    ofVec3f scale;
+    bool bPerlin;
+    float scale;
+    float mass;
+    float forceMult;
     ofColor colour;
 
-    int trailLength;
     enum TrailType {TRAIL_NONE,TRAIL_DOTS,TRAIL_TAIL};
     TrailType trailType;
+    int trailLength;
 
 protected:
 

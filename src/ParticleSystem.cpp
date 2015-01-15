@@ -18,6 +18,8 @@ ParticleSystem::ParticleSystem() :
 
 	sprite.getTexture().enableMipmap();
 	sprite.load("circle3.png");
+	spriteTrail.getTexture().enableMipmap();
+	spriteTrail.load("circle2.png");
 	ofEnableAlphaBlending();
 
 //    billboards.getVertices().reserve(1000);
@@ -28,7 +30,8 @@ ParticleSystem::ParticleSystem() :
 	billboards.setMode(OF_PRIMITIVE_POINTS);
 
     trails.setUsage( GL_DYNAMIC_DRAW );
-	trails.setMode(OF_PRIMITIVE_TRIANGLE_STRIP);
+	trails.setMode(OF_PRIMITIVE_POINTS);
+	//trails.setMode(OF_PRIMITIVE_TRIANGLE_STRIP);
 
 }
 
@@ -37,13 +40,17 @@ void ParticleSystem::setTimeStep(float _timeStep)
 	timeStep = _timeStep;
 }
 
-void ParticleSystem::addParticle(float force) {
+void ParticleSystem::addParticle(float force, float spectrum) {
 
-    float kGamma = 100.0f;
     ofVec3f r = ofVec3f(ofRandomf(),ofRandomf(),ofRandomf());
     r.normalize();
     //ofLog() << "addParticle --  force: " << force << " r:" << r;
-    Particle p(ofVec3f::zero(),r*kGamma*force);
+    Particle p(ofVec3f::zero(),r*force);
+
+    ofFloatColor c;
+    c.setHsb(spectrum,0.8,1);
+    p.colour = c;
+    p.scale *= (1.0f/(spectrum))*0.05f;
 
     //addParticle(p);
     particles.push_back(p);
@@ -78,7 +85,7 @@ Particle& ParticleSystem::operator[](unsigned i) {
 
 
 void ParticleSystem::resetForces() {
-	for(int i = 0; i < particles.size(); i++) {
+	for(unsigned int i = 0; i < particles.size(); i++) {
 		particles[i].resetForce();
 	}
 }
@@ -90,9 +97,6 @@ void ParticleSystem::update(ofCamera& cam) {
 	for(unsigned int i = 0; i < particles.size(); i++) {
 
 		if(particles[i].bIsDead) {
-            ofVec3f f = (ofVec3f::zero() - (particles[i].pos) / 20.0f);
-            particles[i].addForce(f);
-            //particles[i].scale *= 0.99f;
 
             if(particles[i].pos.distanceSquared(ofVec3f(0,0,0)) < 1.0f)
             {
@@ -131,22 +135,26 @@ void ParticleSystem::draw() {
 
 void ParticleSystem::renderTrails()
 {
+   // ofBlendMode(OF_BLENDMODE_ADD);
 	trails.clear();
 
 	for( vector<Particle>::iterator it = particles.begin(); it != particles.end(); ++it ) {
-		it->renderTrails(trails);
+		it->renderTrailPoints(trails);
 	}
 	trails.setupIndicesAuto();
 
-//	trailShader.begin();
-//	ofEnablePointSprites();
+	//trailShader.begin();
+	billboardShader.begin();
+	ofEnablePointSprites();
 
-    //trailImg.getTexture().bind();
-	trails.draw(OF_MESH_FILL);
-	//trailImg.getTexture().unbind();
+    spriteTrail.getTexture().bind();
+	//trails.draw(OF_MESH_FILL);
+	trails.draw();
+	spriteTrail.getTexture().unbind();
 
-//	ofDisablePointSprites();
-  //  trailShader.end();
+	ofDisablePointSprites();
+    //trailShader.end();
+    billboardShader.end();
 }
 
 void ParticleSystem::noDepthSort(ofCamera& cam)
@@ -154,7 +162,7 @@ void ParticleSystem::noDepthSort(ofCamera& cam)
 	for(unsigned int i = 0; i < particles.size(); i++) {
         billboards.getVertices()[i] = particles[i].pos;
         billboards.getColors()[i] = particles[i].colour;
-        billboards.setNormal(i,particles[i].scale);
+        billboards.setNormal(i,ofVec3f(particles[i].scale,0,0));
 	}
 }
 
@@ -178,7 +186,7 @@ void ParticleSystem::depthSort(ofCamera& cam)
 	int i = it->first;
         billboards.getVertices()[j] = particles[i].pos;
         billboards.getColors()[j] = particles[i].colour;
-        billboards.setNormal(j,particles[i].scale);
+        billboards.setNormal(j,ofVec3f(particles[i].scale,0,0));
 		j++;
 	}
 }

@@ -141,6 +141,12 @@
 		<Unit filename="src/ParticleSystem.h">
 			<Option virtualFolder="src/" />
 		</Unit>
+		<Unit filename="src/Perlin.cpp">
+			<Option virtualFolder="src/" />
+		</Unit>
+		<Unit filename="src/Perlin.h">
+			<Option virtualFolder="src/" />
+		</Unit>
 		<Unit filename="src/main.cpp">
 			<Option virtualFolder="src/" />
 		</Unit>

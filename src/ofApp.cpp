@@ -15,7 +15,6 @@ void ofApp::setup() {
     ofSeedRandom(ofGetUnixTime());
     ofEnableAntiAliasing();
     //ofLogToFile("myLogFile.txt", false);
-    //ofSetSphereResolution(12);
     //ofEnableDepthTest();
     ofSoundStreamListDevices();
 
@@ -47,7 +46,7 @@ void ofApp::setup() {
 
 //--------------------------------------------------------------
 void ofApp::update() {
-    curTime = ofGetElapsedTimeMillis()/25.0f;
+    curTime = ofGetElapsedTimeMillis()/15.0f;
     deltaTime = curTime - prevTime;
     prevTime = curTime;
 
@@ -56,11 +55,11 @@ void ofApp::update() {
 
     bool doRotate = true;
     float audioValue = 0;
-    for(int i=5; i<numOfBands; i++) {
+    for(int i=2; i<numOfBands; i++) {
         audioValue = audioData[i];
-        if (audioValue > 0.5f) {
+        if (audioValue > 0.3f) {
             //add particle!
-            particleSystem.addParticle(audioValue);
+            particleSystem.addParticle(audioValue,i/(float)numOfBands);
             rotation += audioValue;
             doRotate = false;
             rotFade = audioValue;
@@ -73,14 +72,14 @@ void ofApp::update() {
 
     if(doRotate) rotation = rotation + (rotFade*=0.95);
 
-    int n = 0;
-    int d = 0;
-    for(int i = 0; i < particleSystem.getParticles().size();i++) {
-        if(!particleSystem.getParticles()[i].bIsDead) {
-            n++;
-        }
-        else d++;
-    }
+//    int n = 0;
+//    int d = 0;
+//    for(unsigned int i = 0; i < particleSystem.getParticles().size();i++) {
+//        if(!particleSystem.getParticles()[i].bIsDead) {
+//            n++;
+//        }
+//        else d++;
+//    }
     //cout << "particles  alive: " << n << "  dead: " <<  d << "  total: " <<  particleSystem.getParticles().size() << "  num vertices: " << particleSystem.billboards.getNumVertices() << endl;
 }
 
@@ -88,6 +87,7 @@ void ofApp::update() {
 void ofApp::draw() {
 
     cam.begin();
+    //cam.setPosition(0,0,500);
 
     particleSystem.draw();
 

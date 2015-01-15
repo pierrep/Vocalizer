@@ -16,7 +16,7 @@ public:
 
 	void resetForces();
 	void setTimeStep(float timeStep);
-	void addParticle(float force);
+	void addParticle(float force, float spectrum);
 	void addParticle(Particle& p);
 	void update(ofCamera& cam);
 	void draw();
@@ -35,6 +35,7 @@ protected:
     ofShader    billboardShader;
     ofShader    trailShader;
     ofImage     sprite;
+    ofImage     spriteTrail;
     ofVboMesh   trails;
 
 };
