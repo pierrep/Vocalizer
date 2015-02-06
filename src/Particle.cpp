@@ -1,19 +1,20 @@
 #include "Particle.h"
 #include "Perlin.h"
+#include "ParticleSystem.h"
 
 Perlin sPerlin( 2 );
 
-Particle::Particle(ofVec3f _pos, ofVec3f _force)  :
+Particle::Particle(ofVec3f _pos, ofVec3f _force, ParticleSystem* _parent)  :
+    ps(_parent),
     pos(_pos),
-    damping(0.21f),
+    damping(0.01f),
     lifetime(250),
     age(0),
     ageRatio(1.0f),
     bIsDead(false),
     bPerlin(true),
-    forceMult(100.0f),
-    trailType(TRAIL_DOTS),
-    trailLength(50.0f)
+    forceMult(50.0f),
+    trailLength(36.0f)
 {
 
 	force.set(_force*forceMult);
@@ -22,7 +23,7 @@ Particle::Particle(ofVec3f _pos, ofVec3f _force)  :
 	mass = scale;
 	vel = ofVec3f::zero();
 
-    if(trailType == TRAIL_TAIL) {
+    if(ps->trailType == ParticleSystem::TRAIL_TAIL) {
         for( int i = 0; i < trailLength; i++ ) {            trailpos.push_back( _pos );        }
     }
 
@@ -47,7 +48,7 @@ void Particle::calculatePerlin()
 //    }
 
 	ofVec3f noise = sPerlin.dfBm( pos * 0.01f + ofVec3f( 0, 0, ofGetElapsedTimeMillis() / 1000.0f ) );
-	perlin = noise.normalize() * 0.1f;
+	perlin = noise.normalize() * 0.99f;
 
 
 }
@@ -83,11 +84,11 @@ void Particle::update(float timeStep)
 
 void Particle::updateTrails()
 {
-    if(trailType == TRAIL_TAIL) {
+    if(ps->trailType == ParticleSystem::TRAIL_TAIL) {
         trailpos.pop_back();
         trailpos.insert(trailpos.begin(),pos);
     }
-    else if(trailType == TRAIL_DOTS) {
+    else if(ps->trailType == ParticleSystem::TRAIL_DOTS) {
         if(vel.length() > 1.0f) {
             if(!bIsDead) {
             trailpos.insert(trailpos.begin(),pos);
@@ -104,7 +105,7 @@ void Particle::updateTrails()
 void Particle::renderTrailPoints(ofVboMesh& trails)
 {
     for( unsigned int i = 0; i < trailpos.size() - 1; i++ ) {
-        float per     = 1.0f - i / (float)(trailpos.size()-1);
+//        float per     = 1.0f - i / (float)(trailpos.size()-1);
 
 //        trails.addVertex(trailpos[i]);
 //        trails.addNormal(ofVec3f(10.0f,0,0));
@@ -122,8 +123,8 @@ void Particle::renderTrailPoints(ofVboMesh& trails)
                 trails.addVertex(t);
                 trails.addNormal(ofVec3f(5.0f,0,0));
                 float per = t.length()/pos.length();
-                ofFloatColor c = ofFloatColor(per, per, per, per-0.3f);
-                //ofFloatColor c = ofFloatColor(per, (per *0.25f), (1.0f - per),(per * 0.5f));
+                //ofFloatColor c = ofFloatColor(per, per, per, per-0.3f);
+                ofFloatColor c = ofFloatColor(per, (per *0.25f), (1.0f - per),(per));
                 trails.addColor( c);
             }
         }
@@ -140,9 +141,9 @@ void Particle::renderTrailPoints(ofVboMesh& trails)
 }
 
 void Particle::renderTrails(ofVboMesh& trails){
-    if(trailType == TRAIL_NONE) return;
+    if(ps->trailType == ParticleSystem::TRAIL_NONE) return;
 
-	for( unsigned int i = 0; i < trailpos.size() - 1; i++ ) {
+	for( unsigned int i = 0; i < trailpos.size() - 2; i++ ) {
         float per     = 1.0f - i / (float)(trailpos.size()-1);
 
 		ofVec3f perp0 = trailpos[i] - trailpos[i+1];

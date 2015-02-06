@@ -1,11 +1,12 @@
 #pragma once
 
 #include "ofMain.h"
+class ParticleSystem;
 
 class Particle {
 public:
 
-    Particle(ofVec3f _pos, ofVec3f _force);
+    Particle(ofVec3f _pos, ofVec3f _force, ParticleSystem* ps);
     //Particle(const Particle &p);
     void update(float timeStep);
     void updateAge();
@@ -16,6 +17,7 @@ public:
     void renderTrails(ofVboMesh& trails);
     void renderTrailPoints(ofVboMesh& trails);
 
+    ParticleSystem* ps;
     ofVec3f pos;        // array of position vectors
 	ofVec3f vel;
 	ofVec3f force;
@@ -32,11 +34,8 @@ public:
     float forceMult;
     ofColor colour;
 
-    enum TrailType {TRAIL_NONE,TRAIL_DOTS,TRAIL_TAIL};
-    TrailType trailType;
     int trailLength;
 
 protected:
-
 
 };

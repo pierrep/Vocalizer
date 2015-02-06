@@ -10,12 +10,15 @@ namespace {
 class ParticleSystem {
 
 public:
+    enum TrailType {TRAIL_NONE,TRAIL_DOTS,TRAIL_TAIL};
+
 	ParticleSystem();
 	unsigned size() const;
 	Particle& operator[](unsigned i);
 
 	void resetForces();
 	void setTimeStep(float timeStep);
+    void setTrailType(TrailType _ttype);
 	void addParticle(float force, float spectrum);
 	void addParticle(Particle& p);
 	void update(ofCamera& cam);
@@ -26,8 +29,11 @@ public:
 	void eraseParticle(int i);
 	vector<Particle>& getParticles() {return particles;}
 
-	    ofVboMesh billboards;
+    ofVboMesh billboards;
+    TrailType   trailType;
+
 protected:
+
 	float timeStep;
 	vector<Particle> particles;
 

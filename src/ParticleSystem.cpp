@@ -1,7 +1,9 @@
 #include "ParticleSystem.h"
+#include "Particle.h"
 
 ParticleSystem::ParticleSystem() :
-    timeStep(0.5f)
+    timeStep(0.1f),
+    trailType(TRAIL_NONE)
 {
 	if(ofGetGLProgrammableRenderer()){
 		billboardShader.load("shadersGL3/Billboard");
@@ -17,7 +19,7 @@ ParticleSystem::ParticleSystem() :
     ofDisableArbTex();
 
 	sprite.getTexture().enableMipmap();
-	sprite.load("circle3.png");
+	sprite.load("flower_01.png");
 	spriteTrail.getTexture().enableMipmap();
 	spriteTrail.load("circle2.png");
 	ofEnableAlphaBlending();
@@ -30,8 +32,11 @@ ParticleSystem::ParticleSystem() :
 	billboards.setMode(OF_PRIMITIVE_POINTS);
 
     trails.setUsage( GL_DYNAMIC_DRAW );
-	trails.setMode(OF_PRIMITIVE_POINTS);
-	//trails.setMode(OF_PRIMITIVE_TRIANGLE_STRIP);
+    if(trailType == TRAIL_DOTS) {
+        trails.setMode(OF_PRIMITIVE_POINTS);
+    } else if(trailType == TRAIL_TAIL) {
+        trails.setMode(OF_PRIMITIVE_TRIANGLE_STRIP);
+    }
 
 }
 
@@ -40,12 +45,18 @@ void ParticleSystem::setTimeStep(float _timeStep)
 	timeStep = _timeStep;
 }
 
+
+void ParticleSystem::setTrailType(TrailType _ttype)
+{
+	trailType = _ttype;
+}
+
 void ParticleSystem::addParticle(float force, float spectrum) {
 
     ofVec3f r = ofVec3f(ofRandomf(),ofRandomf(),ofRandomf());
     r.normalize();
     //ofLog() << "addParticle --  force: " << force << " r:" << r;
-    Particle p(ofVec3f::zero(),r*force);
+    Particle p(ofVec3f::zero(),r*force,this);
 
     ofFloatColor c;
     c.setHsb(spectrum,0.8,1);
@@ -139,22 +150,22 @@ void ParticleSystem::renderTrails()
 	trails.clear();
 
 	for( vector<Particle>::iterator it = particles.begin(); it != particles.end(); ++it ) {
-		it->renderTrailPoints(trails);
+		it->renderTrails(trails);
 	}
 	trails.setupIndicesAuto();
 
-	//trailShader.begin();
-	billboardShader.begin();
+	trailShader.begin();
+	//billboardShader.begin();
 	ofEnablePointSprites();
 
     spriteTrail.getTexture().bind();
-	//trails.draw(OF_MESH_FILL);
-	trails.draw();
+	trails.draw(OF_MESH_FILL);
+	//trails.draw();
 	spriteTrail.getTexture().unbind();
 
 	ofDisablePointSprites();
-    //trailShader.end();
-    billboardShader.end();
+    trailShader.end();
+    //billboardShader.end();
 }
 
 void ParticleSystem::noDepthSort(ofCamera& cam)
