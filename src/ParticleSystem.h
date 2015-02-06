@@ -10,7 +10,7 @@ namespace {
 class ParticleSystem {
 
 public:
-    enum TrailType {TRAIL_NONE,TRAIL_DOTS,TRAIL_TAIL};
+    enum TrailType {TRAIL_NONE,TRAIL_LINE,TRAIL_TAIL,TRAIL_QUADS};
 
 	ParticleSystem();
 	unsigned size() const;
@@ -30,12 +30,13 @@ public:
 	vector<Particle>& getParticles() {return particles;}
 
     ofVboMesh billboards;
-    TrailType   trailType;
 
 protected:
+    friend Particle;
 
 	float timeStep;
 	vector<Particle> particles;
+    TrailType   trailType;
 
 
     ofShader    billboardShader;

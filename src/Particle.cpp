@@ -12,7 +12,7 @@ Particle::Particle(ofVec3f _pos, ofVec3f _force, ParticleSystem* _parent)  :
     age(0),
     ageRatio(1.0f),
     bIsDead(false),
-    bPerlin(false),
+    bPerlin(true),
     forceMult(100.0f),
     trailLength(50.0f)
 {
@@ -23,7 +23,7 @@ Particle::Particle(ofVec3f _pos, ofVec3f _force, ParticleSystem* _parent)  :
 	mass = scale;
 	vel = ofVec3f::zero();
 
-    if(ps->trailType == ParticleSystem::TRAIL_TAIL) {
+    if((ps->trailType == ParticleSystem::TRAIL_TAIL) || (ps->trailType == ParticleSystem::TRAIL_QUADS)) {
         for( int i = 0; i < trailLength; i++ ) {            trailpos.push_back( _pos );        }
     }
 
@@ -39,7 +39,7 @@ void Particle::updateAge(){    age += 1.0f;	if( age > lifetime ) {		bIsDead
 void Particle::calculatePerlin()
 {
     perlin = ofVec3f::zero();
-   if(force.length() < 1.0f) return;
+   if(force.length() < 0.9f) return;
 //
 //    if((vel.x > 0.001) &&(vel.y > 0.001)) {
 //        float xnoise = ofSignedNoise((ofGetElapsedTimeMillis()/100.0f)*5.0f/(vel.x*10.05f) );
@@ -48,7 +48,7 @@ void Particle::calculatePerlin()
 //    }
 
 	ofVec3f noise = sPerlin.dfBm( pos * 0.01f + ofVec3f( 0, 0, ofGetElapsedTimeMillis() / 1000.0f ) );
-	perlin = noise.normalize() * 0.9f;
+	perlin = noise.normalize() * 0.9f * ageRatio;
 
 
 }
@@ -84,11 +84,11 @@ void Particle::update(float timeStep)
 
 void Particle::updateTrails()
 {
-    if(ps->trailType == ParticleSystem::TRAIL_TAIL) {
+    if((ps->trailType == ParticleSystem::TRAIL_TAIL) || (ps->trailType == ParticleSystem::TRAIL_QUADS)) {
         trailpos.pop_back();
         trailpos.insert(trailpos.begin(),pos);
     }
-    else if(ps->trailType == ParticleSystem::TRAIL_DOTS) {
+    else if(ps->trailType == ParticleSystem::TRAIL_LINE) {
         if(vel.length() > 1.0f) {
             if(!bIsDead) {
             trailpos.insert(trailpos.begin(),pos);
@@ -142,7 +142,7 @@ void Particle::renderTrailPoints(ofVboMesh& trails)
 
 void Particle::renderTrails(ofVboMesh& trails){
 
-	for( unsigned int i = 0; i < trailpos.size() - 2; i++ ) {
+	for( unsigned int i = 0; i < trailpos.size() - 1; i++ ) {
         float per     = 1.0f - i / (float)(trailpos.size()-1);
 
 		ofVec3f perp0 = trailpos[i] - trailpos[i+1];

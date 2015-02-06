@@ -104,7 +104,7 @@ void ofApp::draw() {
 //--------------------------------------------------------------
 void ofApp::setupParticles()
 {
-    particleSystem.trailType = ParticleSystem::TRAIL_DOTS;
+    particleSystem.setTrailType(ParticleSystem::TRAIL_QUADS);
 }
 
 //--------------------------------------------------------------

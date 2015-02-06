@@ -32,12 +32,6 @@ ParticleSystem::ParticleSystem() :
 	billboards.setMode(OF_PRIMITIVE_POINTS);
 
     trails.setUsage( GL_DYNAMIC_DRAW );
-    if(trailType == TRAIL_DOTS) {
-        trails.setMode(OF_PRIMITIVE_POINTS);
-    } else if(trailType == TRAIL_TAIL) {
-        //trails.setMode(OF_PRIMITIVE_TRIANGLE_STRIP);
-        trails.setMode(OF_PRIMITIVE_POINTS);
-    }
 
 }
 
@@ -50,6 +44,12 @@ void ParticleSystem::setTimeStep(float _timeStep)
 void ParticleSystem::setTrailType(TrailType _ttype)
 {
 	trailType = _ttype;
+
+   if ((trailType == TRAIL_LINE) || (trailType == TRAIL_TAIL))  {
+        trails.setMode(OF_PRIMITIVE_POINTS);
+    } else if(trailType == TRAIL_QUADS) {
+        trails.setMode(OF_PRIMITIVE_TRIANGLE_STRIP);
+    }
 }
 
 void ParticleSystem::addParticle(float force, float spectrum) {
@@ -94,15 +94,11 @@ Particle& ParticleSystem::operator[](unsigned i) {
 	return particles[i];
 }
 
-
-
 void ParticleSystem::resetForces() {
 	for(unsigned int i = 0; i < particles.size(); i++) {
 		particles[i].resetForce();
 	}
 }
-
-
 
 void ParticleSystem::update(ofCamera& cam) {
 //ofLog() << "update ----------------------------";
@@ -152,29 +148,23 @@ void ParticleSystem::renderTrails()
 	trails.clear();
 
 	for( vector<Particle>::iterator it = particles.begin(); it != particles.end(); ++it ) {
-        if(trailType == TRAIL_DOTS) {
+        if((trailType == TRAIL_LINE) || (trailType == TRAIL_TAIL)) {
             it->renderTrailPoints(trails);
-        } else if(trailType == TRAIL_TAIL) {
-            it->renderTrailPoints(trails);
-            //it->renderTrails(trails);
+        } else if(trailType == TRAIL_QUADS) {
+            it->renderTrails(trails);
         }
 	}
 	trails.setupIndicesAuto();
 
-    if(trailType == TRAIL_TAIL) {
-	//trailShader.begin();
-	billboardShader.begin();
-	ofEnablePointSprites();
+    if(trailType == TRAIL_QUADS) {
+        trailShader.begin();
 
-    spriteTrail.getTexture().bind();
-	//trails.draw(OF_MESH_FILL);
-	trails.draw();
-	spriteTrail.getTexture().unbind();
+        spriteTrail.getTexture().bind();
+        trails.draw(OF_MESH_FILL);
+        spriteTrail.getTexture().unbind();
 
-	ofDisablePointSprites();
-    //trailShader.end();
-    billboardShader.end();
-    } else if (trailType == TRAIL_DOTS) {
+        trailShader.end();
+    } else if ((trailType == TRAIL_LINE) || (trailType == TRAIL_TAIL)) {
         billboardShader.begin();
         ofEnablePointSprites();
 
