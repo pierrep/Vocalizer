@@ -2,7 +2,7 @@
 #include "Particle.h"
 
 ParticleSystem::ParticleSystem() :
-    timeStep(0.1f),
+    timeStep(0.5f),
     trailType(TRAIL_NONE)
 {
 	if(ofGetGLProgrammableRenderer()){
@@ -35,7 +35,8 @@ ParticleSystem::ParticleSystem() :
     if(trailType == TRAIL_DOTS) {
         trails.setMode(OF_PRIMITIVE_POINTS);
     } else if(trailType == TRAIL_TAIL) {
-        trails.setMode(OF_PRIMITIVE_TRIANGLE_STRIP);
+        //trails.setMode(OF_PRIMITIVE_TRIANGLE_STRIP);
+        trails.setMode(OF_PRIMITIVE_POINTS);
     }
 
 }
@@ -147,25 +148,43 @@ void ParticleSystem::draw() {
 void ParticleSystem::renderTrails()
 {
    // ofBlendMode(OF_BLENDMODE_ADD);
+
 	trails.clear();
 
 	for( vector<Particle>::iterator it = particles.begin(); it != particles.end(); ++it ) {
-		it->renderTrails(trails);
+        if(trailType == TRAIL_DOTS) {
+            it->renderTrailPoints(trails);
+        } else if(trailType == TRAIL_TAIL) {
+            it->renderTrailPoints(trails);
+            //it->renderTrails(trails);
+        }
 	}
 	trails.setupIndicesAuto();
 
-	trailShader.begin();
-	//billboardShader.begin();
+    if(trailType == TRAIL_TAIL) {
+	//trailShader.begin();
+	billboardShader.begin();
 	ofEnablePointSprites();
 
     spriteTrail.getTexture().bind();
-	trails.draw(OF_MESH_FILL);
-	//trails.draw();
+	//trails.draw(OF_MESH_FILL);
+	trails.draw();
 	spriteTrail.getTexture().unbind();
 
 	ofDisablePointSprites();
-    trailShader.end();
-    //billboardShader.end();
+    //trailShader.end();
+    billboardShader.end();
+    } else if (trailType == TRAIL_DOTS) {
+        billboardShader.begin();
+        ofEnablePointSprites();
+
+        spriteTrail.getTexture().bind();
+        trails.draw();
+        spriteTrail.getTexture().unbind();
+
+        ofDisablePointSprites();
+        billboardShader.end();
+    }
 }
 
 void ParticleSystem::noDepthSort(ofCamera& cam)

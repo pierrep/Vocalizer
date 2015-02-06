@@ -7,14 +7,14 @@ Perlin sPerlin( 2 );
 Particle::Particle(ofVec3f _pos, ofVec3f _force, ParticleSystem* _parent)  :
     ps(_parent),
     pos(_pos),
-    damping(0.01f),
+    damping(0.21f),
     lifetime(250),
     age(0),
     ageRatio(1.0f),
     bIsDead(false),
-    bPerlin(true),
-    forceMult(50.0f),
-    trailLength(36.0f)
+    bPerlin(false),
+    forceMult(100.0f),
+    trailLength(50.0f)
 {
 
 	force.set(_force*forceMult);
@@ -48,7 +48,7 @@ void Particle::calculatePerlin()
 //    }
 
 	ofVec3f noise = sPerlin.dfBm( pos * 0.01f + ofVec3f( 0, 0, ofGetElapsedTimeMillis() / 1000.0f ) );
-	perlin = noise.normalize() * 0.99f;
+	perlin = noise.normalize() * 0.9f;
 
 
 }
@@ -105,7 +105,7 @@ void Particle::updateTrails()
 void Particle::renderTrailPoints(ofVboMesh& trails)
 {
     for( unsigned int i = 0; i < trailpos.size() - 1; i++ ) {
-//        float per     = 1.0f - i / (float)(trailpos.size()-1);
+        float per     = 1.0f - i / (float)(trailpos.size()-1);
 
 //        trails.addVertex(trailpos[i]);
 //        trails.addNormal(ofVec3f(10.0f,0,0));
@@ -141,7 +141,6 @@ void Particle::renderTrailPoints(ofVboMesh& trails)
 }
 
 void Particle::renderTrails(ofVboMesh& trails){
-    if(ps->trailType == ParticleSystem::TRAIL_NONE) return;
 
 	for( unsigned int i = 0; i < trailpos.size() - 2; i++ ) {
         float per     = 1.0f - i / (float)(trailpos.size()-1);

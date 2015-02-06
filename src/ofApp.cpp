@@ -14,9 +14,9 @@ void ofApp::setup() {
     ofSetVerticalSync(true);
     ofSeedRandom(ofGetUnixTime());
     ofEnableAntiAliasing();
+
     //ofLogToFile("myLogFile.txt", false);
-    //ofEnableDepthTest();
-    ofSoundStreamListDevices();
+    //ofSoundStreamListDevices();
 
     audioThreshold.set("audioThreshold", 1.0, 0.0, 1.0);
     audioPeakDecay.set("audioPeakDecay", 0.915, 0.0, 1.0);
@@ -27,8 +27,8 @@ void ofApp::setup() {
     audioData = new float[numOfBands];
 
     fft.setBufferSize(numOfBands);
-    //fft.setup(10);
-    fft.setup();
+    fft.setup(7);
+    //fft.setup();
 
     bDrawGui = true;
     string guiPath = "audio.xml";
@@ -104,7 +104,7 @@ void ofApp::draw() {
 //--------------------------------------------------------------
 void ofApp::setupParticles()
 {
-    particleSystem.trailType = ParticleSystem::TRAIL_TAIL;
+    particleSystem.trailType = ParticleSystem::TRAIL_DOTS;
 }
 
 //--------------------------------------------------------------
