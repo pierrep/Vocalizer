@@ -9,14 +9,12 @@ ofApp::~ofApp()
 
 //--------------------------------------------------------------
 void ofApp::setup() {
-
     ofBackground(253,214,1);
     ofSetVerticalSync(true);
     ofSeedRandom(ofGetUnixTime());
     ofEnableAntiAliasing();
-
+    //ofSoundStreamListDevices();
     //ofLogToFile("myLogFile.txt", false);
-   // ofSoundStreamListDevices();
 
     audioThreshold.set("audioThreshold", 1.0, 0.0, 1.0);
     audioPeakDecay.set("audioPeakDecay", 0.915, 0.0, 1.0);
@@ -59,28 +57,27 @@ void ofApp::update() {
         audioValue = audioData[i];
         if (audioValue > 0.3f) {
             //add particle!
-            particleSystem.addParticle(audioValue,i/(float)numOfBands);
+            for(unsigned int j=0; j < ps.size();j++) {
+                if(ofGetFrameNum() % 2 == 0)
+                {
+                    ps[j]->addParticle(audioValue,i/(float)numOfBands);
+                }
+            }
+
             rotation += audioValue;
             doRotate = false;
             rotFade = audioValue;
         }
     }
 
-    //particleSystem.setTimeStep(deltaTime);
-    particleSystem.update(cam);
-    particleSystem.resetForces();
+    for(unsigned int i=0; i < ps.size();i++) {
+        //ps[i].setTimeStep(deltaTime);
+        ps[i]->update(cam);
+        ps[i]->resetForces();
+    }
 
     if(doRotate) rotation = rotation + (rotFade*=0.95);
 
-//    int n = 0;
-//    int d = 0;
-//    for(unsigned int i = 0; i < particleSystem.getParticles().size();i++) {
-//        if(!particleSystem.getParticles()[i].bIsDead) {
-//            n++;
-//        }
-//        else d++;
-//    }
-    //cout << "particles  alive: " << n << "  dead: " <<  d << "  total: " <<  particleSystem.getParticles().size() << "  num vertices: " << particleSystem.billboards.getNumVertices() << endl;
 }
 
 //--------------------------------------------------------------
@@ -89,7 +86,9 @@ void ofApp::draw() {
     cam.begin();
     //cam.setPosition(0,0,500);
 
-    particleSystem.draw();
+    for(unsigned int i=0; i < ps.size();i++) {
+        ps[i]->draw();
+    }
 
     cam.orbit(rotation,0,500,ofVec3f(0,0,0));
     cam.end();
@@ -104,8 +103,62 @@ void ofApp::draw() {
 //--------------------------------------------------------------
 void ofApp::setupParticles()
 {
-    particleSystem.setTrailType(ParticleSystem::TRAIL_LINE);
-    particleSystem.setSheetWidth(1);
+    ParticleSystem* p = new ParticleSystem();
+    p->damping = 0.21f;
+    p->lifetime = 250;
+    p->forceMultiplier = 100.0f;
+    p->returnToOrigin = true;
+    p->perlinAmount = 0.9;
+    p->perlinThreshold = 1.0;
+    p->spriteName = "circle.png";
+
+    p->setTrailType(ParticleSystem::TRAIL_LINE);
+    p->setSheetWidth(1);
+    p->loadResources();
+
+    ps.push_back(p);
+
+    ParticleSystem* p2 = new ParticleSystem();
+    p2->damping = 0.01f;
+    p2->lifetime = 100;
+    p2->forceMultiplier = 10.0f;
+    p2->returnToOrigin = false;
+    p2->perlinAmount = 0.4;
+    p2->perlinThreshold = 0.01;
+    p2->spriteName = "flower_01.png";
+
+    p2->setTrailType(ParticleSystem::TRAIL_QUADS);
+    p2->setSheetWidth(1);
+    p2->loadResources();
+
+    ps.push_back(p2);
+}
+
+//--------------------------------------------------------------
+void ofApp::loadSettings()
+{
+    for(unsigned int i=0; i < ps.size();i++) {
+
+    }
+}
+
+//--------------------------------------------------------------
+void ofApp::saveSettings()
+{
+    int idx;
+
+    for(unsigned int i=0; i < ps.size();i++) {
+
+        idx = xml.addTag("ParticleSystem");
+        xml.pushTag("ParticleSystem",idx);
+        xml.addValue("Damping", ps[i]->damping);
+        xml.addValue("Lifetime", ps[i]->lifetime);
+        xml.addValue("ForceMultiplier", ps[i]->forceMultiplier);
+        xml.addValue("TrailType", ps[i]->trailType);
+        xml.addValue("ReturnToOrigin", ps[i]->returnToOrigin);
+
+        xml.popTag();
+    }
 }
 
 //--------------------------------------------------------------
@@ -116,6 +169,9 @@ void ofApp::keyPressed(int key){
     }
     if(key == 'g') {
         bDrawGui = !bDrawGui;
+    }
+    if((key == 's') || (key == 'S')) {
+        saveSettings();
     }
 }
 
@@ -145,7 +201,9 @@ void ofApp::updateFFT()
 }
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-
+    if((key == 's' ) || (key == 'S')) {
+        xml.save("settings.xml");
+    }
 }
 
 //--------------------------------------------------------------

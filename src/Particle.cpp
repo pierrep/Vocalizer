@@ -7,30 +7,38 @@ Perlin sPerlin( 2 );
 Particle::Particle(ofVec3f _pos, ofVec3f _force, ParticleSystem* _parent)  :
     ps(_parent),
     pos(_pos),
-    damping(0.21f),
-    lifetime(250),
     age(0),
     ageRatio(1.0f),
     bIsDead(false),
     bPerlin(true),
+    bReturnOrigin(true),
+    damping(0.21f),
+    lifetime(250),
+    scale(50.0f),
+    mass(50.0f),
     forceMult(100.0f),
-    trailLength(50.0f),
+    perlinAmount(0.5),
+    perlinThreshold(0.5),
+    colour(ofColor::pink),
+    trailLength(30.0f),
     rotation(0),
     rotationDir(1),
+    spriteCount(1),
     animSpeed(0)
 {
 
-	force.set(_force*forceMult);
+	force.set(_force);
 	colour = ofColor(255.0f*ofRandomuf(),100,100);
-	scale = ofRandom(120.0f,200.0f);
+	scale = ofRandom(100.0f,200.0f);
 	mass = scale;
 	vel = ofVec3f::zero();
 
-	spriteNum = floor(ofRandom(ps->totalSprites));
+	spriteCount = floor(ofRandom(ps->totalSprites));
 	animSpeed = 0;
 
     rotation = ofRandom(TWO_PI);
     rotationDir = ceil(ofRandomf())*2 - 1;
+
 
     if((ps->trailType == ParticleSystem::TRAIL_TAIL) || (ps->trailType == ParticleSystem::TRAIL_QUADS)) {
         for( int i = 0; i < trailLength; i++ ) {            trailpos.push_back( _pos );        }
@@ -48,7 +56,7 @@ void Particle::updateAge(){    age += 1.0f;	if( age > lifetime ) {		bIsDead
 void Particle::calculatePerlin()
 {
     perlin = ofVec3f::zero();
-   if(force.length() < 0.9f) return;
+   if(force.length() < perlinThreshold) return;
 //
 //    if((vel.x > 0.001) &&(vel.y > 0.001)) {
 //        float xnoise = ofSignedNoise((ofGetElapsedTimeMillis()/100.0f)*5.0f/(vel.x*10.05f) );
@@ -57,16 +65,19 @@ void Particle::calculatePerlin()
 //    }
 
 	ofVec3f noise = sPerlin.dfBm( pos * 0.01f + ofVec3f( 0, 0, ofGetElapsedTimeMillis() / 1000.0f ) );
-	perlin = noise.normalize() * 0.9f * ageRatio;
+	perlin = noise.normalize() * perlinAmount * ageRatio;
 
 
 }
 
 void Particle::update(float timeStep)
 {
-    if(bIsDead) {
-        ofVec3f f = ofVec3f::zero() - pos;
-        addForce(f*5.0f);
+    if(bIsDead)
+    {
+        if(bReturnOrigin) {
+            ofVec3f f = ofVec3f::zero() - pos;
+            addForce(f*5.0f);
+        }
         scale *= 0.97f;
     }
 
@@ -89,7 +100,7 @@ void Particle::update(float timeStep)
 
 	updateAge();
 
-    rotation += force.length()/10.0f * rotationDir;
+    rotation += force.length() * rotationDir;
 }
 
 void Particle::updateTrails()
@@ -119,7 +130,7 @@ void Particle::renderTrailPoints(ofVboMesh& trails)
 
         ofVec3f diff =  trailpos[i+1] - trailpos[i];
         float dist = diff.length();
-        int divisions = (int)dist + 3;
+        int divisions = (int)dist + 2;
 
         for(int j = 0; j < divisions;j++)
         {

@@ -1,0 +1,22 @@
+<ParticleSystem>
+	<Damping>0.21</Damping>
+	<Lifetime>250</Lifetime>
+	<Scale>50.0</Scale>	
+    <Mass>50.0</Mass>
+    <ForceMultiplier>100.0</ForceMultiplier>
+    <SpriteColour>255,255,255,255</SpriteColour>
+
+    <Rotation>0</Rotation>
+    <RotationDir>1</RotationDir>
+    
+    <SpriteCount>1</SpriteCount>
+    <AnimationSpeed>0</AnimationSpeed>	
+	
+	<PerlinNoise>true</PerlinNoise>
+	<ReturnToOrigin>true</ReturnToOrigin>
+	
+	<TrailType>0</TrailType>  <!-- 0 = none, 1 = line, 2 = tail, 3 = quad tail -->
+    <TrailLength>30.0</TrailLength>
+    <TrailStartColour>0,0,0,255</TrailStartColour>
+    <TrailEndColour>0,0,0,0</TrailEndColour>
+</ParticleSystem>

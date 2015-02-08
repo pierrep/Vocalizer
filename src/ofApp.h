@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ofxFFTLive.h"
 #include "ofxGui.h"
+#include "ofxXmlSettings.h"
 #include "ParticleSystem.h"
 
 class ofApp : public ofBaseApp{
@@ -24,12 +25,17 @@ public:
     void gotMessage(ofMessage msg);
     void drawGUI();
     void updateFFT();
+    void loadSettings();
+    void saveSettings();
 
     void setupParticles();
 
+    /* FFT audio */
     ofxFFTLive fft;
     int numOfBands;
+    float* audioData;
 
+    /* GUI */
     bool bDrawGui;
     ofxPanel gui;
     ofParameter<float> audioThreshold;
@@ -37,21 +43,16 @@ public:
     ofParameter<float> audioMaxDecay;
     ofParameter<bool> audioMirror;
 
-    ofMesh meshOriginal;
-    ofMesh meshWarped;
     ofCamera cam;
-    //ofEasyCam cam;
+    ofxXmlSettings xml;
 
-    float* audioData;
-
+    vector<ParticleSystem*> ps;
     ParticleSystem particleSystem;
-
-    ParticleSystem spriteSystem;
 
 
     float       deltaTime;
-    double       prevTime;
-    double       curTime;
+    double      prevTime;
+    double      curTime;
 
     float       rotation;
     float       rotFade;

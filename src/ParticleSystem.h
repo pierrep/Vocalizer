@@ -10,7 +10,7 @@ namespace {
 class ParticleSystem {
 
 public:
-    enum TrailType {TRAIL_NONE,TRAIL_LINE,TRAIL_TAIL,TRAIL_QUADS};
+    enum TrailType {TRAIL_NONE = 0,TRAIL_LINE,TRAIL_TAIL,TRAIL_QUADS};
 
 	ParticleSystem();
 	unsigned size() const;
@@ -28,17 +28,26 @@ public:
 	void depthSort(ofCamera& cam);
 	void noDepthSort(ofCamera& cam);
 	void eraseParticle(int i);
+	void loadResources();
 	vector<Particle>& getParticles() {return particles;}
 
     ofVboMesh billboards;
+
+    /* Parameters */
+    float damping;
+    float lifetime;
+    float forceMultiplier;
+    bool returnToOrigin;
+    TrailType trailType;
+    float perlinAmount;
+    float perlinThreshold;
+    string spriteName;
 
 protected:
     friend Particle;
 
 	float timeStep;
 	vector<Particle> particles;
-    TrailType   trailType;
-
 
     ofShader    billboardShader;
     ofShader    spriteShader;
@@ -53,4 +62,6 @@ protected:
     /* sprite sheets */
     int         totalSprites;
     int         sheetWidth;
+
+
 };

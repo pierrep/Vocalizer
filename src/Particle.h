@@ -23,15 +23,18 @@ public:
 	ofVec3f force;
 	ofVec3f perlin;
 	vector<ofVec3f> trailpos;
-    float damping;
-    float lifetime;
     float age;
     float ageRatio;
     bool bIsDead;
     bool bPerlin;
+    bool bReturnOrigin;
+    float damping;
+    float lifetime;
     float scale;
     float mass;
     float forceMult;
+    float perlinAmount;
+    float perlinThreshold;
     ofColor colour;
 
     int trailLength;
@@ -40,7 +43,7 @@ public:
     int rotationDir;
 
     ///sprite sheet
-    int spriteNum;
+    int spriteCount;
     int animSpeed;
 
 

@@ -7,28 +7,12 @@ ParticleSystem::ParticleSystem() :
     totalSprites(1),
     sheetWidth(1)
 {
-	if(ofGetGLProgrammableRenderer()){
-        spriteShader.load("shadersGL3/Billboard");
-		billboardShader.load("shadersGL3/Billboard");
-		trailShader.load("shadersGL3/Trail");
-	}else{
-        spriteShader.load("shadersGL2/Billboard");
-		billboardShader.load("shadersGL2/Billboard");
-		trailShader.load("shadersGL2/Trail");
-	}
-
     particles.reserve(10000);
 
 	/// we need to disable ARB textures in order to use normalized texcoords
     ofDisableArbTex();
 
-	sprite.getTexture().enableMipmap();
-	sprite.load("flower_01.png");
-	//sprite.load("sprite_sheet1.png");
-	//sprite.load("sprite_sheet_anim.png");
 
-	spriteTrail.getTexture().enableMipmap();
-	spriteTrail.load("sprite-trails/dot.png");
 	ofEnableAlphaBlending();
 
 //    billboards.getVertices().reserve(1000);
@@ -40,6 +24,27 @@ ParticleSystem::ParticleSystem() :
 
     trails.setUsage( GL_DYNAMIC_DRAW );
 
+}
+
+void ParticleSystem::loadResources()
+{
+	if(ofGetGLProgrammableRenderer()){
+        spriteShader.load("shadersGL3/Billboard");
+		billboardShader.load("shadersGL3/Billboard");
+		trailShader.load("shadersGL3/Trail");
+	}else{
+        spriteShader.load("shadersGL2/Billboard");
+		billboardShader.load("shadersGL2/Billboard");
+		trailShader.load("shadersGL2/Trail");
+	}
+
+	sprite.getTexture().enableMipmap();
+	sprite.load(spriteName);
+	//sprite.load("sprite_sheet1.png");
+	//sprite.load("sprite_sheet_anim.png");
+
+	spriteTrail.getTexture().enableMipmap();
+	spriteTrail.load("sprite-trails/dot.png");
 }
 
 void ParticleSystem::setTimeStep(float _timeStep)
@@ -70,14 +75,19 @@ void ParticleSystem::addParticle(float force, float spectrum) {
     ofVec3f r = ofVec3f(ofRandomf(),ofRandomf(),ofRandomf());
     r.normalize();
     //ofLog() << "addParticle --  force: " << force << " r:" << r;
-    Particle p(ofVec3f::zero(),r*force,this);
+    Particle p(ofVec3f::zero(),r*force*forceMultiplier,this);
 
     ofFloatColor c;
     c.setHsb(spectrum,0.8,1);
     p.colour = c;
     p.scale *= (1.0f/(spectrum))*0.05f;
+    p.damping = damping;
+    p.forceMult = forceMultiplier;
+    p.lifetime = lifetime;
+    p.bReturnOrigin = returnToOrigin;
+    p.perlinAmount = perlinAmount;
+    p.perlinThreshold = perlinThreshold;
 
-    //addParticle(p);
     particles.push_back(p);
 
 	int kNumParticles = particles.size();
@@ -121,7 +131,7 @@ void ParticleSystem::update(ofCamera& cam) {
 
 		if((*itr).bIsDead) {
 
-            if((*itr).pos.distanceSquared(ofVec3f(0,0,0)) < 1.0f)
+            if(( (*itr).pos.distanceSquared(ofVec3f(0,0,0)) < 1.0f) || ((*itr).scale < 0.1f))
             {
                 itr = particles.erase(itr);
                 int kNumParticles = particles.size();
@@ -180,6 +190,7 @@ void ParticleSystem::draw() {
 void ParticleSystem::renderTrails()
 {
    // ofBlendMode(OF_BLENDMODE_ADD);
+    if(trailType == TRAIL_NONE) return;
 
 	trails.clear();
 
@@ -218,7 +229,13 @@ void ParticleSystem::noDepthSort(ofCamera& cam)
 	for(unsigned int i = 0; i < particles.size(); i++) {
         billboards.getVertices()[i] = particles[i].pos;
         billboards.getColors()[i] = particles[i].colour;
-        billboards.setNormal(i,ofVec3f(particles[i].scale,sheetWidth,particles[i].spriteNum++));
+        billboards.setNormal(i,ofVec3f(particles[i].scale,sheetWidth,particles[i].spriteCount));
+        rotations[i] = particles[i].rotation;
+
+        if(particles[i].animSpeed > 0) {
+            if((int)particles[i].age % particles[i].animSpeed == 0) particles[i].spriteCount++;
+            if(particles[i].spriteCount >= totalSprites) particles[i].spriteCount = 0;
+        }
 	}
 }
 
@@ -242,15 +259,14 @@ void ParticleSystem::depthSort(ofCamera& cam)
 	int i = it->first;
         billboards.getVertices()[j] = particles[i].pos;
         billboards.getColors()[j] = particles[i].colour;
-
-        if(particles[i].animSpeed > 0) {
-            if((int)particles[i].age % particles[i].animSpeed == 0) particles[i].spriteNum++;
-            if(particles[i].spriteNum >= totalSprites) particles[i].spriteNum = 0;
-        }
-
+        billboards.setNormal(j,ofVec3f(particles[i].scale,sheetWidth,particles[i].spriteCount));
         rotations[j] = particles[i].rotation;
 
-        billboards.setNormal(j,ofVec3f(particles[i].scale,sheetWidth,particles[i].spriteNum));
+        if(particles[i].animSpeed > 0) {
+            if((int)particles[i].age % particles[i].animSpeed == 0) particles[i].spriteCount++;
+            if(particles[i].spriteCount >= totalSprites) particles[i].spriteCount = 0;
+        }
+
 		j++;
 	}
 
