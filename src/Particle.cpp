@@ -7,13 +7,13 @@ Perlin sPerlin( 2 );
 Particle::Particle(ofVec3f _pos, ofVec3f _force, ParticleSystem* _parent)  :
     ps(_parent),
     pos(_pos),
-    damping(0.21f),
-    lifetime(250),
+    damping(0.001f),
+    lifetime(1250),
     age(0),
     ageRatio(1.0f),
     bIsDead(false),
     bPerlin(true),
-    forceMult(100.0f),
+    forceMult(5.0f),
     trailLength(50.0f)
 {
 
@@ -106,7 +106,7 @@ void Particle::renderTrailPoints(ofVboMesh& trails)
 {
     for( unsigned int i = 0; i < trailpos.size() - 1; i++ ) {
         float per     = 1.0f - i / (float)(trailpos.size()-1);
-
+//
 //        trails.addVertex(trailpos[i]);
 //        trails.addNormal(ofVec3f(10.0f,0,0));
 //        ofFloatColor c = ofFloatColor(per, 0, 0, per);
@@ -128,14 +128,7 @@ void Particle::renderTrailPoints(ofVboMesh& trails)
                 trails.addColor( c);
             }
         }
-//        if(i == 0) {
-//            trails.addColor( ofFloatColor(0,0,0,0));
-//        }
-//        else if(i < (trailpos.size() -2))
-//            trails.addColor( c);
-//        else {
-//            trails.addColor( ofFloatColor(0,0,0,0));
-//        }
+
     }
 
 }

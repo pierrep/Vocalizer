@@ -108,6 +108,12 @@
 		<Unit filename="bin/data/shadersGL2/Billboard.vert">
 			<Option virtualFolder="shaders/GL2/" />
 		</Unit>
+		<Unit filename="bin/data/shadersGL2/BillboardSheet.frag">
+			<Option virtualFolder="shaders/GL2/" />
+		</Unit>
+		<Unit filename="bin/data/shadersGL2/BillboardSheet.vert">
+			<Option virtualFolder="shaders/GL2/" />
+		</Unit>
 		<Unit filename="bin/data/shadersGL2/Trail.frag">
 			<Option virtualFolder="shaders/GL2/" />
 		</Unit>

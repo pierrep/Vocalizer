@@ -16,7 +16,7 @@ void ofApp::setup() {
     ofEnableAntiAliasing();
 
     //ofLogToFile("myLogFile.txt", false);
-    //ofSoundStreamListDevices();
+   // ofSoundStreamListDevices();
 
     audioThreshold.set("audioThreshold", 1.0, 0.0, 1.0);
     audioPeakDecay.set("audioPeakDecay", 0.915, 0.0, 1.0);
@@ -27,7 +27,7 @@ void ofApp::setup() {
     audioData = new float[numOfBands];
 
     fft.setBufferSize(numOfBands);
-    fft.setup(7);
+    fft.setup(10);
     //fft.setup();
 
     bDrawGui = true;
@@ -55,7 +55,7 @@ void ofApp::update() {
 
     bool doRotate = true;
     float audioValue = 0;
-    for(int i=2; i<numOfBands; i++) {
+    for(int i=5; i<numOfBands; i++) {
         audioValue = audioData[i];
         if (audioValue > 0.3f) {
             //add particle!
@@ -104,7 +104,7 @@ void ofApp::draw() {
 //--------------------------------------------------------------
 void ofApp::setupParticles()
 {
-    particleSystem.setTrailType(ParticleSystem::TRAIL_QUADS);
+    particleSystem.setTrailType(ParticleSystem::TRAIL_TAIL);
 }
 
 //--------------------------------------------------------------

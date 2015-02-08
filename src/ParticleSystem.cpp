@@ -9,7 +9,7 @@ ParticleSystem::ParticleSystem() :
 		billboardShader.load("shadersGL3/Billboard");
 		trailShader.load("shadersGL3/Trail");
 	}else{
-		billboardShader.load("shadersGL2/Billboard");
+		billboardShader.load("shadersGL2/BillboardSheet");
 		trailShader.load("shadersGL2/Trail");
 	}
 
@@ -19,7 +19,8 @@ ParticleSystem::ParticleSystem() :
     ofDisableArbTex();
 
 	sprite.getTexture().enableMipmap();
-	sprite.load("flower_01.png");
+	//sprite.load("flower_01.png");
+	sprite.load("sprite_sheet1.png");
 	spriteTrail.getTexture().enableMipmap();
 	spriteTrail.load("circle2.png");
 	ofEnableAlphaBlending();

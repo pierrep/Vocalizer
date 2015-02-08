@@ -45,4 +45,6 @@ protected:
     ofImage     spriteTrail;
     ofVboMesh   trails;
 
+    /* sprite sheets */
+    int         spriteNum;
 };
