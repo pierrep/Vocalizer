@@ -1,3 +1,5 @@
+attribute float angle;
+varying  float rotAngle;
 
 void main() {
 	gl_TexCoord[0] = gl_MultiTexCoord0;
@@ -8,6 +10,8 @@ void main() {
 
 	gl_PointSize = gl_Normal.x * att;
 	gl_FrontColor = gl_Color;
+
+    rotAngle = angle;
 }
 
 

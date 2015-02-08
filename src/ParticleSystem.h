@@ -19,6 +19,7 @@ public:
 	void resetForces();
 	void setTimeStep(float timeStep);
     void setTrailType(TrailType _ttype);
+    void setSheetWidth(int s_width);
 	void addParticle(float force, float spectrum);
 	void addParticle(Particle& p);
 	void update(ofCamera& cam);
@@ -40,11 +41,16 @@ protected:
 
 
     ofShader    billboardShader;
+    ofShader    spriteShader;
     ofShader    trailShader;
+
     ofImage     sprite;
     ofImage     spriteTrail;
     ofVboMesh   trails;
 
+    vector<float> rotations;
+
     /* sprite sheets */
-    int         spriteNum;
+    int         totalSprites;
+    int         sheetWidth;
 };

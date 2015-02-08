@@ -3,13 +3,17 @@
 
 ParticleSystem::ParticleSystem() :
     timeStep(0.5f),
-    trailType(TRAIL_NONE)
+    trailType(TRAIL_NONE),
+    totalSprites(1),
+    sheetWidth(1)
 {
 	if(ofGetGLProgrammableRenderer()){
+        spriteShader.load("shadersGL3/Billboard");
 		billboardShader.load("shadersGL3/Billboard");
 		trailShader.load("shadersGL3/Trail");
 	}else{
-		billboardShader.load("shadersGL2/BillboardSheet");
+        spriteShader.load("shadersGL2/Billboard");
+		billboardShader.load("shadersGL2/Billboard");
 		trailShader.load("shadersGL2/Trail");
 	}
 
@@ -19,10 +23,12 @@ ParticleSystem::ParticleSystem() :
     ofDisableArbTex();
 
 	sprite.getTexture().enableMipmap();
-	//sprite.load("flower_01.png");
-	sprite.load("sprite_sheet1.png");
+	sprite.load("flower_01.png");
+	//sprite.load("sprite_sheet1.png");
+	//sprite.load("sprite_sheet_anim.png");
+
 	spriteTrail.getTexture().enableMipmap();
-	spriteTrail.load("circle2.png");
+	spriteTrail.load("dot.png");
 	ofEnableAlphaBlending();
 
 //    billboards.getVertices().reserve(1000);
@@ -39,6 +45,12 @@ ParticleSystem::ParticleSystem() :
 void ParticleSystem::setTimeStep(float _timeStep)
 {
 	timeStep = _timeStep;
+}
+
+void ParticleSystem::setSheetWidth(int sw)
+{
+	sheetWidth = sw;
+	totalSprites = sw * sw;
 }
 
 
@@ -73,6 +85,7 @@ void ParticleSystem::addParticle(float force, float spectrum) {
     billboards.getVertices().resize(kNumParticles);
 	billboards.getColors().resize(kNumParticles);
 	billboards.getNormals().resize(kNumParticles,ofVec3f(0));
+    rotations.resize(kNumParticles);
 
 	//ofLog() << "end addParticle";
 }
@@ -130,15 +143,20 @@ void ParticleSystem::draw() {
 
 	renderTrails();
 
-	billboardShader.begin();
+	spriteShader.begin();
 	ofEnablePointSprites(); // not needed for GL3/4
 	sprite.getTexture().bind();
+
+    if(particles.size() > 0) {
+        int angleLoc = spriteShader.getAttributeLocation("angle");
+        billboards.getVbo().setAttributeData(angleLoc, &rotations[0], 1, particles.size(), GL_DYNAMIC_DRAW);
+    }
 
 	billboards.draw();
 
 	sprite.getTexture().unbind();
 	ofDisablePointSprites(); // not needed for GL3/4
-	billboardShader.end();
+	spriteShader.end();
 
 }
 
@@ -183,7 +201,7 @@ void ParticleSystem::noDepthSort(ofCamera& cam)
 	for(unsigned int i = 0; i < particles.size(); i++) {
         billboards.getVertices()[i] = particles[i].pos;
         billboards.getColors()[i] = particles[i].colour;
-        billboards.setNormal(i,ofVec3f(particles[i].scale,0,0));
+        billboards.setNormal(i,ofVec3f(particles[i].scale,sheetWidth,particles[i].spriteNum++));
 	}
 }
 
@@ -207,9 +225,18 @@ void ParticleSystem::depthSort(ofCamera& cam)
 	int i = it->first;
         billboards.getVertices()[j] = particles[i].pos;
         billboards.getColors()[j] = particles[i].colour;
-        billboards.setNormal(j,ofVec3f(particles[i].scale,0,0));
+
+        if(particles[i].animSpeed > 0) {
+            if((int)particles[i].age % particles[i].animSpeed == 0) particles[i].spriteNum++;
+            if(particles[i].spriteNum >= totalSprites) particles[i].spriteNum = 0;
+        }
+
+        rotations[j] = particles[i].rotation;
+
+        billboards.setNormal(j,ofVec3f(particles[i].scale,sheetWidth,particles[i].spriteNum));
 		j++;
 	}
+
 }
 
 void ParticleSystem::eraseParticle(int i)

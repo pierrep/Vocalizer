@@ -27,7 +27,7 @@ void ofApp::setup() {
     audioData = new float[numOfBands];
 
     fft.setBufferSize(numOfBands);
-    fft.setup(10);
+    fft.setup(7);
     //fft.setup();
 
     bDrawGui = true;
@@ -104,7 +104,8 @@ void ofApp::draw() {
 //--------------------------------------------------------------
 void ofApp::setupParticles()
 {
-    particleSystem.setTrailType(ParticleSystem::TRAIL_TAIL);
+    particleSystem.setTrailType(ParticleSystem::TRAIL_LINE);
+    particleSystem.setSheetWidth(1);
 }
 
 //--------------------------------------------------------------

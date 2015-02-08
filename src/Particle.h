@@ -36,6 +36,14 @@ public:
 
     int trailLength;
 
+    float rotation;
+    int rotationDir;
+
+    ///sprite sheet
+    int spriteNum;
+    int animSpeed;
+
+
 protected:
 
 };
