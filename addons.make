@@ -1,3 +1,4 @@
 ofxGui
 ofxFFT
 ofxTween
+ofxXmlSettings

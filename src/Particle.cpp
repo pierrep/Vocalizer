@@ -124,12 +124,18 @@ void Particle::renderTrailPoints(ofVboMesh& trails)
         for(int j = 0; j < divisions;j++)
         {
             ofVec3f t = trailpos[i]+ (j/(float)(divisions))*diff;
-            if(t.lengthSquared() > pos.lengthSquared()) t = pos;
-            trails.addVertex(t);
-            trails.addNormal(ofVec3f(5.0f,0,0));
+
+            /* needed when shinking back to the origin: */
+            if(t.lengthSquared() > pos.lengthSquared()) {
+                t = pos;
+            }
+
 
             float percent = 1.0f - i / (float)(trailpos.size()-1);
             percent -= (j/(float)divisions) *1.0f/(float)(trailpos.size()-1);
+
+            trails.addVertex(t);
+            trails.addNormal(ofVec3f(6.0f*percent,0,0));
 
             ofFloatColor c = ofFloatColor(0, 0, 0, percent);
             //ofFloatColor c = ofFloatColor(percent, (percent *0.25f), (1.0f - percent),(percent));

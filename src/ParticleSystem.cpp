@@ -28,7 +28,7 @@ ParticleSystem::ParticleSystem() :
 	//sprite.load("sprite_sheet_anim.png");
 
 	spriteTrail.getTexture().enableMipmap();
-	spriteTrail.load("dot.png");
+	spriteTrail.load("sprite-trails/dot.png");
 	ofEnableAlphaBlending();
 
 //    billboards.getVertices().reserve(1000);
@@ -116,27 +116,44 @@ void ParticleSystem::resetForces() {
 
 void ParticleSystem::update(ofCamera& cam) {
 //ofLog() << "update ----------------------------";
-	for(unsigned int i = 0; i < particles.size(); i++) {
 
-		if(particles[i].bIsDead) {
+    for(vector<Particle>::iterator itr = particles.begin(); itr != particles.end(); ) {
 
-            if(particles[i].pos.distanceSquared(ofVec3f(0,0,0)) < 1.0f)
+		if((*itr).bIsDead) {
+
+            if((*itr).pos.distanceSquared(ofVec3f(0,0,0)) < 1.0f)
             {
-                eraseParticle(i);
+                itr = particles.erase(itr);
+                int kNumParticles = particles.size();
+                billboards.getVertices().resize(kNumParticles);
+                billboards.getColors().resize(kNumParticles);
+                billboards.getNormals().resize(kNumParticles,ofVec3f(0));
             } else {
-                particles[i].update(timeStep);
+                (*itr).update(timeStep);
+                ++itr;
             }
 		} else {
-            particles[i].update(timeStep);
-           // ofLog() << "Particle position: " << particles[i].pos << " Total particles:" << particles.size();
+            (*itr).update(timeStep);
+            ++itr;
 		}
 
-
 	}
-
     depthSort(cam);
     //noDepthSort(cam);
+}
 
+void ParticleSystem::eraseParticle(int i)
+{
+    ///kill particle
+    //cout << "erase particle " << i << endl;
+    particles.erase(particles.begin()+i);
+    int kNumParticles = particles.size();
+//    billboards.removeVertex(i);
+//    billboards.removeColor(i);
+//    billboards.removeNormal(i);
+    billboards.getVertices().resize(kNumParticles);
+    billboards.getColors().resize(kNumParticles);
+    billboards.getNormals().resize(kNumParticles,ofVec3f(0));
 }
 
 void ParticleSystem::draw() {
@@ -237,18 +254,4 @@ void ParticleSystem::depthSort(ofCamera& cam)
 		j++;
 	}
 
-}
-
-void ParticleSystem::eraseParticle(int i)
-{
-    ///kill particle
-    //cout << "erase particle " << i << endl;
-    particles.erase(particles.begin()+i);
-    int kNumParticles = particles.size();
-//    billboards.removeVertex(i);
-//    billboards.removeColor(i);
-//    billboards.removeNormal(i);
-    billboards.getVertices().resize(kNumParticles);
-    billboards.getColors().resize(kNumParticles);
-    billboards.getNormals().resize(kNumParticles,ofVec3f(0));
 }
