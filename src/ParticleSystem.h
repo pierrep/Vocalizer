@@ -34,13 +34,24 @@ public:
     ofVboMesh billboards;
 
     /* Parameters */
-    float damping;
-    float lifetime;
+    float spriteDamping;
+    float spriteLifetime;
+    float spriteScale;
+    float spriteMass;
     float forceMultiplier;
+    ofColor spriteColour;
+    float spriteInitialRotation;
+    int spriteRotationDir;
+    int spriteSheetWidth;
     bool returnToOrigin;
-    TrailType trailType;
     float perlinAmount;
     float perlinThreshold;
+    float spriteAnimationSpeed;
+    bool spritePerlinNoise;
+    TrailType trailType;
+    float trailLength;
+    ofColor trailStartColour;
+    ofColor trailEndColour;
     string spriteName;
 
 protected:
@@ -56,12 +67,10 @@ protected:
     ofImage     sprite;
     ofImage     spriteTrail;
     ofVboMesh   trails;
-
-    vector<float> rotations;
+    vector<float> rotations; ///rotation attributes
 
     /* sprite sheets */
     int         totalSprites;
-    int         sheetWidth;
 
 
 };

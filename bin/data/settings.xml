@@ -1,14 +1,20 @@
 <ParticleSystem>
     <Damping>0.209999993</Damping>
-    <Lifetime>250.000000000</Lifetime>
+    <Lifetime>30.000000000</Lifetime>
+    <Scale>5.000000000</Scale>
+    <Mass>15.000000000</Mass>
     <ForceMultiplier>100.000000000</ForceMultiplier>
+    <SpriteColour>255, 200, 200, 255</SpriteColour>
     <TrailType>1</TrailType>
     <ReturnToOrigin>1</ReturnToOrigin>
 </ParticleSystem>
 <ParticleSystem>
     <Damping>0.010000000</Damping>
     <Lifetime>100.000000000</Lifetime>
+    <Scale>50.000000000</Scale>
+    <Mass>50.000000000</Mass>
     <ForceMultiplier>10.000000000</ForceMultiplier>
+    <SpriteColour>78, 255, 120, 255</SpriteColour>
     <TrailType>3</TrailType>
     <ReturnToOrigin>0</ReturnToOrigin>
 </ParticleSystem>

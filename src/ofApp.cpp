@@ -104,12 +104,23 @@ void ofApp::draw() {
 void ofApp::setupParticles()
 {
     ParticleSystem* p = new ParticleSystem();
-    p->damping = 0.21f;
-    p->lifetime = 250;
+    p->spriteDamping = 0.21f;
+    p->spriteLifetime = 100;
+    p->spriteScale = 5.0f;
+    p->spriteMass = 15.0f;
+    p->spriteInitialRotation = 0.0f;
+    p->spriteRotationDir = 1;
+    p->spriteColour = ofColor(255,200,200);
     p->forceMultiplier = 100.0f;
     p->returnToOrigin = true;
+    p->spritePerlinNoise = true;
     p->perlinAmount = 0.9;
     p->perlinThreshold = 1.0;
+    p->spriteAnimationSpeed = 0;
+    p->trailLength = 30.0f;
+    p->trailStartColour = ofColor(255,0,0,255);
+    p->trailEndColour = ofColor(255,0,0,255);
+
     p->spriteName = "circle.png";
 
     p->setTrailType(ParticleSystem::TRAIL_LINE);
@@ -119,16 +130,27 @@ void ofApp::setupParticles()
     ps.push_back(p);
 
     ParticleSystem* p2 = new ParticleSystem();
-    p2->damping = 0.01f;
-    p2->lifetime = 100;
+    p2->spriteDamping = 0.01f;
+    p2->spriteLifetime = 100;
+    p2->spriteScale = 50.0f;
+    p2->spriteMass = 50.0f;
+    p2->spriteInitialRotation = 0.0f;
+    p2->spriteRotationDir = -1;
+    p2->spriteColour = ofColor(78,255,120);
     p2->forceMultiplier = 10.0f;
     p2->returnToOrigin = false;
+    p2->spritePerlinNoise = true;
     p2->perlinAmount = 0.4;
     p2->perlinThreshold = 0.01;
-    p2->spriteName = "flower_01.png";
+    p2->spriteAnimationSpeed = 4;
+    p2->trailLength = 30.0f;
+    p2->trailStartColour = ofColor(255,0,0,255);
+    p2->trailEndColour = ofColor(255,0,0,0);
+    //p2->spriteName = "flower_01.png";
+    p2->spriteName = "sprite-sheets/sprite_sheet_anim.png";
 
     p2->setTrailType(ParticleSystem::TRAIL_QUADS);
-    p2->setSheetWidth(1);
+    p2->setSheetWidth(4);
     p2->loadResources();
 
     ps.push_back(p2);
@@ -151,11 +173,22 @@ void ofApp::saveSettings()
 
         idx = xml.addTag("ParticleSystem");
         xml.pushTag("ParticleSystem",idx);
-        xml.addValue("Damping", ps[i]->damping);
-        xml.addValue("Lifetime", ps[i]->lifetime);
+        xml.addValue("SpriteDamping", ps[i]->spriteDamping);
+        xml.addValue("SpriteLifetime", ps[i]->spriteLifetime);
+        xml.addValue("SpriteScale", ps[i]->spriteScale);
+        xml.addValue("SpriteMass", ps[i]->spriteMass);
         xml.addValue("ForceMultiplier", ps[i]->forceMultiplier);
-        xml.addValue("TrailType", ps[i]->trailType);
+        xml.addValue("SpriteColour", ofToString(ps[i]->spriteColour));
+        xml.addValue("SpriteInitialRotation", ps[i]->spriteInitialRotation);
+        xml.addValue("SpriteSheetWidth", ps[i]->spriteSheetWidth);
+        xml.addValue("SpriteRotationDir", ps[i]->spriteRotationDir);
         xml.addValue("ReturnToOrigin", ps[i]->returnToOrigin);
+        xml.addValue("SpriteAnimationSpeed", ps[i]->spriteAnimationSpeed);
+        xml.addValue("PerlinNoise", ofToString(ps[i]->spritePerlinNoise));
+        xml.addValue("TrailType", ps[i]->trailType);
+        xml.addValue("TrailLength", ps[i]->trailLength);
+        xml.addValue("TrailStartColour", ofToString(ps[i]->trailStartColour));
+        xml.addValue("TrailEndColour", ofToString(ps[i]->trailEndColour));
 
         xml.popTag();
     }

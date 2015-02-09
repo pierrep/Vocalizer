@@ -2,10 +2,10 @@
 #include "Particle.h"
 
 ParticleSystem::ParticleSystem() :
-    timeStep(0.5f),
+    spriteSheetWidth(1),
     trailType(TRAIL_NONE),
-    totalSprites(1),
-    sheetWidth(1)
+    timeStep(0.5f),
+    totalSprites(1)
 {
     particles.reserve(10000);
 
@@ -33,7 +33,11 @@ void ParticleSystem::loadResources()
 		billboardShader.load("shadersGL3/Billboard");
 		trailShader.load("shadersGL3/Trail");
 	}else{
-        spriteShader.load("shadersGL2/Billboard");
+	    if(spriteAnimationSpeed > 0) {
+            spriteShader.load("shadersGL2/BillboardSheet");
+	    } else {
+            spriteShader.load("shadersGL2/Billboard");
+	    }
 		billboardShader.load("shadersGL2/Billboard");
 		trailShader.load("shadersGL2/Trail");
 	}
@@ -54,7 +58,7 @@ void ParticleSystem::setTimeStep(float _timeStep)
 
 void ParticleSystem::setSheetWidth(int sw)
 {
-	sheetWidth = sw;
+	spriteSheetWidth = sw;
 	totalSprites = sw * sw;
 }
 
@@ -80,13 +84,24 @@ void ParticleSystem::addParticle(float force, float spectrum) {
     ofFloatColor c;
     c.setHsb(spectrum,0.8,1);
     p.colour = c;
+
+   // p.colour = spriteColour;
     p.scale *= (1.0f/(spectrum))*0.05f;
-    p.damping = damping;
+    p.damping = spriteDamping;
     p.forceMult = forceMultiplier;
-    p.lifetime = lifetime;
+    p.lifetime = spriteLifetime;
+    p.scale = spriteScale;
+    p.mass = spriteMass;
+    p.rotation = spriteInitialRotation;
+    p.rotationDir = spriteRotationDir;
     p.bReturnOrigin = returnToOrigin;
+    p.bPerlin = spritePerlinNoise;
     p.perlinAmount = perlinAmount;
     p.perlinThreshold = perlinThreshold;
+    p.animSpeed = spriteAnimationSpeed;
+    p.trailLength = trailLength;
+    p.trailStartColor = trailStartColour;
+    p.trailEndColor = trailEndColour;
 
     particles.push_back(p);
 
@@ -229,7 +244,7 @@ void ParticleSystem::noDepthSort(ofCamera& cam)
 	for(unsigned int i = 0; i < particles.size(); i++) {
         billboards.getVertices()[i] = particles[i].pos;
         billboards.getColors()[i] = particles[i].colour;
-        billboards.setNormal(i,ofVec3f(particles[i].scale,sheetWidth,particles[i].spriteCount));
+        billboards.setNormal(i,ofVec3f(particles[i].scale,spriteSheetWidth,particles[i].spriteCount));
         rotations[i] = particles[i].rotation;
 
         if(particles[i].animSpeed > 0) {
@@ -259,7 +274,7 @@ void ParticleSystem::depthSort(ofCamera& cam)
 	int i = it->first;
         billboards.getVertices()[j] = particles[i].pos;
         billboards.getColors()[j] = particles[i].colour;
-        billboards.setNormal(j,ofVec3f(particles[i].scale,sheetWidth,particles[i].spriteCount));
+        billboards.setNormal(j,ofVec3f(particles[i].scale,spriteSheetWidth,particles[i].spriteCount));
         rotations[j] = particles[i].rotation;
 
         if(particles[i].animSpeed > 0) {

@@ -38,6 +38,8 @@ public:
     ofColor colour;
 
     int trailLength;
+    ofColor trailStartColor;
+    ofColor trailEndColor;
 
     float rotation;
     int rotationDir;

@@ -1,22 +1,26 @@
 <ParticleSystem>
-	<Damping>0.21</Damping>
-	<Lifetime>250</Lifetime>
-	<Scale>50.0</Scale>	
-    <Mass>50.0</Mass>
+	<SpriteDamping>0.21</SpriteDamping>
+	<SpriteLifetime>250</SpriteLifetime>
+	<SpriteScale>50.0</SpriteScale>	
+    <SpriteMass>50.0</SpriteMass>
     <ForceMultiplier>100.0</ForceMultiplier>
     <SpriteColour>255,255,255,255</SpriteColour>
 
-    <Rotation>0</Rotation>
-    <RotationDir>1</RotationDir>
+    <SpriteInitialRotation>0</SpriteInitialRotation>
+    <SpriteRotationDir>1</SpriteRotationDir> 			<!-- -1 or 1 for clockwise/anticlockwise....forgot which is which -->
     
-    <SpriteCount>1</SpriteCount>
-    <AnimationSpeed>0</AnimationSpeed>	
+    <SpriteSheetWidth>1</SpriteSheetWidth>   			<!-- e.g. is this a 1x1 2x2, 4x4 etc sprite sheet. Just list the width in terms of number of sprites along a side of the sheet -->
+    <SpriteAnimationSpeed>0</SpriteAnimationSpeed>		<!-- s -->
 	
-	<PerlinNoise>true</PerlinNoise>
-	<ReturnToOrigin>true</ReturnToOrigin>
+	<PerlinNoise>true</PerlinNoise>						<!-- true or false, switches noise on/off -->
+	<PerlinNoiseThreshold>0.1</PerlinNoiseThreshold>  	<!-- 0.0 to 1.0 if the particle force is less than this amount, perlin noise is not applied -->
+	<PerlinNoiseAmount>0.5</PerlinNoiseAmount>		  	<!-- 0.0 to 1.0 how strong the perlin noise is applied, if above the threshold -->
+	<ReturnToOrigin>true</ReturnToOrigin>				<!-- does the particle get sucked back into the centre upon dying? -->
 	
-	<TrailType>0</TrailType>  <!-- 0 = none, 1 = line, 2 = tail, 3 = quad tail -->
+	<TrailType>0</TrailType>  							<!-- 0 = none, 1 = line, 2 = tail, 3 = quad tail -->
     <TrailLength>30.0</TrailLength>
     <TrailStartColour>0,0,0,255</TrailStartColour>
     <TrailEndColour>0,0,0,0</TrailEndColour>
+    <TrailWidth>6.0</TrailWidth>
+    <TrailTaperWidth>true</TrailTaperWidth>
 </ParticleSystem>
