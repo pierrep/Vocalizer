@@ -28,11 +28,12 @@ ParticleSystem::ParticleSystem() :
 
 void ParticleSystem::loadResources()
 {
-	if(ofGetGLProgrammableRenderer()){
-        spriteShader.load("shadersGL3/Billboard");
-		billboardShader.load("shadersGL3/Billboard");
-		trailShader.load("shadersGL3/Trail");
-	}else{
+	//if(ofGetGLProgrammableRenderer()){
+    //  spriteShader.load("shadersGL3/Billboard");
+	//	billboardShader.load("shadersGL3/Billboard");
+	//	trailShader.load("shadersGL3/Trail");
+	//}else
+    {
 	    if(spriteAnimationSpeed > 0) {
             spriteShader.load("shadersGL2/BillboardSheet");
 	    } else {

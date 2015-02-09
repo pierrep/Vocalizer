@@ -50,8 +50,8 @@ public:
     bool spritePerlinNoise;
     TrailType trailType;
     float trailLength;
-    ofColor trailStartColour;
-    ofColor trailEndColour;
+    ofFloatColor trailStartColour;
+    ofFloatColor trailEndColour;
     string spriteName;
 
 protected:

@@ -25,8 +25,8 @@ void ofApp::setup() {
     audioData = new float[numOfBands];
 
     fft.setBufferSize(numOfBands);
-    fft.setup(7);
-    //fft.setup();
+    //fft.setup(7);
+    fft.setup();
 
     bDrawGui = true;
     string guiPath = "audio.xml";
@@ -106,7 +106,7 @@ void ofApp::setupParticles()
     ParticleSystem* p = new ParticleSystem();
     p->spriteDamping = 0.21f;
     p->spriteLifetime = 100;
-    p->spriteScale = 5.0f;
+    p->spriteScale = 40.0f;
     p->spriteMass = 15.0f;
     p->spriteInitialRotation = 0.0f;
     p->spriteRotationDir = 1;
@@ -118,8 +118,8 @@ void ofApp::setupParticles()
     p->perlinThreshold = 1.0;
     p->spriteAnimationSpeed = 0;
     p->trailLength = 30.0f;
-    p->trailStartColour = ofColor(255,0,0,255);
-    p->trailEndColour = ofColor(255,0,0,255);
+    p->trailStartColour = of/Users/grimus/code/openFrameworks/apps/IntelChallengeApps/VocalizerFloatColor(0,0,0,1);
+    p->trailEndColour = ofFloatColor(1,1,1,0.5);
 
     p->spriteName = "circle.png";
 
@@ -132,7 +132,7 @@ void ofApp::setupParticles()
     ParticleSystem* p2 = new ParticleSystem();
     p2->spriteDamping = 0.01f;
     p2->spriteLifetime = 100;
-    p2->spriteScale = 50.0f;
+    p2->spriteScale = 30.0f;
     p2->spriteMass = 50.0f;
     p2->spriteInitialRotation = 0.0f;
     p2->spriteRotationDir = -1;
@@ -142,12 +142,12 @@ void ofApp::setupParticles()
     p2->spritePerlinNoise = true;
     p2->perlinAmount = 0.4;
     p2->perlinThreshold = 0.01;
-    p2->spriteAnimationSpeed = 4;
+    p2->spriteAnimationSpeed = 0;
     p2->trailLength = 30.0f;
-    p2->trailStartColour = ofColor(255,0,0,255);
-    p2->trailEndColour = ofColor(255,0,0,0);
-    //p2->spriteName = "flower_01.png";
-    p2->spriteName = "sprite-sheets/sprite_sheet_anim.png";
+    p2->trailStartColour = ofFloatColor(1,0,0.3,1);
+    p2->trailEndColour = ofFloatColor(0,0,0,0);
+    p2->spriteName = "flower_01.png";
+    //p2->spriteName = "sprite-sheets/sprite_sheet_anim.png";
 
     p2->setTrailType(ParticleSystem::TRAIL_QUADS);
     p2->setSheetWidth(4);

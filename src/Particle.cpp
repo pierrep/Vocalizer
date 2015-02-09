@@ -41,7 +41,9 @@ Particle::Particle(ofVec3f _pos, ofVec3f _force, ParticleSystem* _parent)  :
 
 
     if((ps->trailType == ParticleSystem::TRAIL_TAIL) || (ps->trailType == ParticleSystem::TRAIL_QUADS)) {
-        for( int i = 0; i < trailLength; i++ ) {            trailpos.push_back( _pos );        }
+        for( int i = 0; i < trailLength; i++ ) {
+            trailpos.push_back( _pos );
+        }
     }
 
 }
@@ -51,7 +53,19 @@ void Particle::addForce(ofVec3f _force)
     force = _force/mass;
 }
 
-void Particle::updateAge(){    age += 1.0f;	if( age > lifetime ) {		bIsDead = true;	}	else {		// When spawned, the ageRatio is 1.0.		// When death occurs, the ageRatio is 0.0.		ageRatio = 1.0f - age / (float)lifetime;	}}
+void Particle::updateAge()
+{
+    age += 1.0f;
+
+	if( age > lifetime ) {
+		bIsDead = true;
+	}
+	else {
+		// When spawned, the ageRatio is 1.0.
+		// When death occurs, the ageRatio is 0.0.
+		ageRatio = 1.0f - age / (float)lifetime;
+	}
+}
 
 void Particle::calculatePerlin()
 {
@@ -148,7 +162,8 @@ void Particle::renderTrailPoints(ofVboMesh& trails)
             trails.addVertex(t);
             trails.addNormal(ofVec3f(6.0f*percent,0,0));
 
-            ofFloatColor c = trailEndColor*percent + trailStartColor*(1.0-percent);
+//            ofFloatColor c = trailEndColor*percent + trailStartColor*(1.0-percent);
+            ofFloatColor c = trailEndColor.getLerped(trailStartColor,percent);
             //ofFloatColor c = ofFloatColor(0, 0, 0, percent);
             //ofFloatColor c = ofFloatColor(percent, (percent *0.25f), (1.0f - percent),(percent));
             trails.addColor( c);
@@ -158,18 +173,23 @@ void Particle::renderTrailPoints(ofVboMesh& trails)
 
 }
 
-void Particle::renderTrails(ofVboMesh& trails){
+void Particle::renderTrails(ofVboMesh& trails)
+{
 
 	for( unsigned int i = 0; i < trailpos.size() - 1; i++ ) {
         float percent     = 1.0f - i / (float)(trailpos.size()-2);
 
 		ofVec3f perp0 = trailpos[i] - trailpos[i+1];
-		perp0.normalize();		ofVec3f perp1 = perp0.crossed( ofVec3f(0,1,0) );		ofVec3f perp2 = perp0.crossed( perp1 );		ofVec3f off = perp2 * scale * ageRatio * percent * 0.2f;
+		perp0.normalize();
+		ofVec3f perp1 = perp0.crossed( ofVec3f(0,1,0) );
+		ofVec3f perp2 = perp0.crossed( perp1 );
+		ofVec3f off = perp2 * scale * ageRatio * percent * 0.2f;
 
         //ofFloatColor c = ofFloatColor(per, per, per,(per ));
         //ofFloatColor c = ofFloatColor(per, (per *0.25f), (1.0f - per),(per * 0.5f));
         //ofFloatColor c = ofFloatColor(255,0,0,255);
-        ofFloatColor c = trailEndColor*percent + trailStartColor*(1.0-percent);
+        //ofFloatColor c = trailEndColor*percent + trailStartColor*(1.0-percent);
+        ofFloatColor c = trailEndColor.getLerped(trailStartColor,percent);
 
 		ofVec3f pt = trailpos[i] - off;
         trails.addVertex(pt);
