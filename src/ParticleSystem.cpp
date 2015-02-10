@@ -23,6 +23,7 @@ ParticleSystem::ParticleSystem() :
 	billboards.setMode(OF_PRIMITIVE_POINTS);
 
     trails.setUsage( GL_DYNAMIC_DRAW );
+    //trails.setMode(OF_PRIMITIVE_POINTS);
 
 }
 
@@ -91,7 +92,7 @@ void ParticleSystem::addParticle(float force, float spectrum) {
     p.damping = spriteDamping;
     p.forceMult = forceMultiplier;
     p.lifetime = spriteLifetime;
-    p.scale = spriteScale;
+    p.scale = (int)(spriteScale * 0.5f*(1.0f/(spectrum))*0.5f);
     p.mass = spriteMass;
     p.rotation = spriteInitialRotation;
     p.rotationDir = spriteRotationDir;

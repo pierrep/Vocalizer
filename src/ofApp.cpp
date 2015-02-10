@@ -13,7 +13,7 @@ void ofApp::setup() {
     ofSetVerticalSync(true);
     ofSeedRandom(ofGetUnixTime());
     ofEnableAntiAliasing();
-    //ofSoundStreamListDevices();
+    ofSoundStreamListDevices();
     //ofLogToFile("myLogFile.txt", false);
 
     audioThreshold.set("audioThreshold", 1.0, 0.0, 1.0);
@@ -25,8 +25,8 @@ void ofApp::setup() {
     audioData = new float[numOfBands];
 
     fft.setBufferSize(numOfBands);
-    //fft.setup(7);
-    fft.setup();
+    fft.setup(6);
+    //fft.setup();
 
     bDrawGui = true;
     string guiPath = "audio.xml";
@@ -105,8 +105,8 @@ void ofApp::setupParticles()
 {
     ParticleSystem* p = new ParticleSystem();
     p->spriteDamping = 0.21f;
-    p->spriteLifetime = 100;
-    p->spriteScale = 40.0f;
+    p->spriteLifetime = 250;
+    p->spriteScale = 10.0f;
     p->spriteMass = 15.0f;
     p->spriteInitialRotation = 0.0f;
     p->spriteRotationDir = 1;
@@ -118,8 +118,8 @@ void ofApp::setupParticles()
     p->perlinThreshold = 1.0;
     p->spriteAnimationSpeed = 0;
     p->trailLength = 30.0f;
-    p->trailStartColour = of/Users/grimus/code/openFrameworks/apps/IntelChallengeApps/VocalizerFloatColor(0,0,0,1);
-    p->trailEndColour = ofFloatColor(1,1,1,0.5);
+    p->trailStartColour = ofFloatColor(0,0,0,1);
+    p->trailEndColour = ofFloatColor(1,1,1,1);
 
     p->spriteName = "circle.png";
 
@@ -144,7 +144,7 @@ void ofApp::setupParticles()
     p2->perlinThreshold = 0.01;
     p2->spriteAnimationSpeed = 0;
     p2->trailLength = 30.0f;
-    p2->trailStartColour = ofFloatColor(1,0,0.3,1);
+    p2->trailStartColour = ofFloatColor(0.5,0,0.3,1);
     p2->trailEndColour = ofFloatColor(0,0,0,0);
     p2->spriteName = "flower_01.png";
     //p2->spriteName = "sprite-sheets/sprite_sheet_anim.png";
