@@ -25,8 +25,8 @@ void ofApp::setup() {
     audioData = new float[numOfBands];
 
     fft.setBufferSize(numOfBands);
-    fft.setup(6);
-    //fft.setup();
+    fft.setup(7);
+    fft.setup();
 
     bDrawGui = true;
     string guiPath = "audio.xml";
@@ -104,7 +104,7 @@ void ofApp::draw() {
 void ofApp::setupParticles()
 {
     loadSettings();
-    
+
     /*
     ParticleSystem* p = new ParticleSystem();
     p->spriteDamping = 0.21f;
@@ -153,7 +153,7 @@ void ofApp::setupParticles()
     p2->trailTaperWidth = false;
     p2->trailStartColour = ofFloatColor(0.5,0,0.3,1);
     p2->trailEndColour = ofFloatColor(0,0,0,0);
-    
+
     p2->spriteName = "flower_01.png";
     //p2->spriteName = "sprite-sheets/sprite_sheet_anim.png";
 
@@ -170,12 +170,12 @@ void ofApp::loadSettings()
 {
 
     xml.load("settings.xml");
-    
+
     int numPS = xml.getNumTags("ParticleSystem");
     if(numPS > 0) {
         for (int i = 0;i < numPS;i++) {
             xml.pushTag("ParticleSystem",i);
-            
+
             ParticleSystem* p = new ParticleSystem();
             p->spriteDamping = xml.getValue("SpriteDamping",0.1f);
             p->spriteLifetime = xml.getValue("SpriteLifetime",100);
@@ -193,24 +193,25 @@ void ofApp::loadSettings()
             p->spriteAnimationSpeed = xml.getValue("SpriteAnimationSpeed",0);
             p->trailLength = xml.getValue("TrailLength",50.0f);
             p->trailWidth = xml.getValue("TrailWidth",6.0f);
-            p->trailTaperWidth = ofFromString<bool>(xml.getValue("TrailTaperWidth","false"));
+            p->trailTaperWidth = ofFromString<bool>(xml.getValue("TrailTaperWidth","true"));
+            ofLog() << "p->trailTaperWidth=" << p->trailTaperWidth;
             p->trailStartColour = ofFromString<ofFloatColor>(xml.getValue("TrailStartColour","1.0f,1.0f,1.0f,1.0f"));
             p->trailEndColour = ofFromString<ofFloatColor>(xml.getValue("TrailEndColour","1.0f,1.0f,1.0f,1.0f"));
-            
+
             p->spriteName = xml.getValue("SpriteName","circle.png");
-            
+
             ParticleSystem::TrailType trailtype = (ParticleSystem::TrailType) xml.getValue("TrailType",0);
-            
+
             ofLog() << "TrailType = " << trailtype;
-            
+
             p->setTrailType(trailtype);
             p->setSheetWidth(xml.getValue("SpriteSheetWidth", 1));
             p->loadResources();
-            
+
             ps.push_back(p);
-            
+
             xml.popTag();
-            
+
         }
     } else {
         ofLogError() << "No particle systems found in XML file";
@@ -221,7 +222,7 @@ void ofApp::loadSettings()
 void ofApp::saveSettings()
 {
     int idx;
-    
+
     xml.clear();
 
     for(unsigned int i=0; i < ps.size();i++) {

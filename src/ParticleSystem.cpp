@@ -50,7 +50,7 @@ void ParticleSystem::loadResources()
 	//sprite.load("sprite_sheet_anim.png");
 
 	spriteTrail.getTexture().enableMipmap();
-	spriteTrail.load("sprite-trails/dot.png");
+	spriteTrail.load("sprite-trails/circle2.png");
 }
 
 void ParticleSystem::setTimeStep(float _timeStep)
@@ -86,7 +86,7 @@ void ParticleSystem::addParticle(float force, float spectrum) {
     ofFloatColor c;
     c.setHsb(spectrum,0.8,1);
     //p.colour = c;
-    
+
 
     p.colour = spriteColour;
     p.colour.setBrightness(ofClamp(1.0-spectrum,0,1)*300);
@@ -105,6 +105,8 @@ void ParticleSystem::addParticle(float force, float spectrum) {
     p.animSpeed = spriteAnimationSpeed;
     p.trailStartColor = trailStartColour;
     p.trailEndColor = trailEndColour;
+    p.bTrailTaperWidth = trailTaperWidth;
+    p.trailWidth = trailWidth;
 
     particles.push_back(p);
 
