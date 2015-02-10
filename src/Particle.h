@@ -6,6 +6,7 @@ class ParticleSystem;
 class Particle {
 public:
 
+    ~Particle();
     Particle(ofVec3f _pos, ofVec3f _force, ParticleSystem* ps);
     //Particle(const Particle &p);
     void update(float timeStep);
@@ -37,10 +38,11 @@ public:
     float perlinThreshold;
     ofColor colour;
 
-    int trailLength;
     ofFloatColor trailStartColor;
     ofFloatColor trailEndColor;
-
+    bool bTrailTaperWidth;
+    float trailWidth;
+    
     float rotation;
     int rotationDir;
 

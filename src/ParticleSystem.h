@@ -47,11 +47,13 @@ public:
     float perlinAmount;
     float perlinThreshold;
     float spriteAnimationSpeed;
-    bool spritePerlinNoise;
+    bool perlinNoise;
     TrailType trailType;
     float trailLength;
     ofFloatColor trailStartColour;
     ofFloatColor trailEndColour;
+    bool trailTaperWidth;
+    float trailWidth;
     string spriteName;
 
 protected:

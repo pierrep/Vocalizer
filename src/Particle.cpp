@@ -4,6 +4,11 @@
 
 Perlin sPerlin( 2 );
 
+Particle::~Particle()
+{
+
+}
+
 Particle::Particle(ofVec3f _pos, ofVec3f _force, ParticleSystem* _parent)  :
     ps(_parent),
     pos(_pos),
@@ -20,7 +25,8 @@ Particle::Particle(ofVec3f _pos, ofVec3f _force, ParticleSystem* _parent)  :
     perlinAmount(0.5),
     perlinThreshold(0.5),
     colour(ofColor::pink),
-    trailLength(30.0f),
+    bTrailTaperWidth(false),
+    trailWidth(6.0f),
     rotation(0),
     rotationDir(1),
     spriteCount(1),
@@ -35,13 +41,18 @@ Particle::Particle(ofVec3f _pos, ofVec3f _force, ParticleSystem* _parent)  :
 
 	spriteCount = floor(ofRandom(ps->totalSprites));
 	animSpeed = 0;
+    
+    trailStartColor = ofColor::black;
+    trailEndColor = ofColor::white;
+
 
     //rotation = ofRandom(TWO_PI);
     rotationDir = ceil(ofRandomf())*2 - 1;
 
-
+    trailpos.clear();
+    
     if((ps->trailType == ParticleSystem::TRAIL_TAIL) || (ps->trailType == ParticleSystem::TRAIL_QUADS)) {
-        for( int i = 0; i < trailLength; i++ ) {
+        for( int i = 0; i < ps->trailLength; i++ ) {
             trailpos.push_back( _pos );
         }
     }
@@ -160,7 +171,11 @@ void Particle::renderTrailPoints(ofVboMesh& trails)
             percent -= (j/(float)divisions) *1.0f/(float)(trailpos.size()-1);
 
             trails.addVertex(t);
-            trails.addNormal(ofVec3f(6.0f*percent,0,0));
+            if(bTrailTaperWidth) {
+                trails.addNormal(ofVec3f(trailWidth*percent,0,0));
+            } else {
+                trails.addNormal(ofVec3f(trailWidth,0,0));
+            }
 
 //            ofFloatColor c = trailEndColor*percent + trailStartColor*(1.0-percent);
             ofFloatColor c = trailEndColor.getLerped(trailStartColor,percent);
@@ -185,10 +200,9 @@ void Particle::renderTrails(ofVboMesh& trails)
 		ofVec3f perp2 = perp0.crossed( perp1 );
 		ofVec3f off = perp2 * scale * ageRatio * percent * 0.2f;
 
-        //ofFloatColor c = ofFloatColor(per, per, per,(per ));
+        //ofFloatColor c = ofFloatColor(percent, percent, percent,percent);
         //ofFloatColor c = ofFloatColor(per, (per *0.25f), (1.0f - per),(per * 0.5f));
         //ofFloatColor c = ofFloatColor(255,0,0,255);
-        //ofFloatColor c = trailEndColor*percent + trailStartColor*(1.0-percent);
         ofFloatColor c = trailEndColor.getLerped(trailStartColor,percent);
 
 		ofVec3f pt = trailpos[i] - off;
