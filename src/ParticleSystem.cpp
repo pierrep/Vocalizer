@@ -35,13 +35,14 @@ void ParticleSystem::loadResources()
 	//	trailShader.load("shadersGL3/Trail");
 	//}else
     {
-	    if(spriteAnimationSpeed > 0) {
+	    if(spriteSheetWidth > 1) {
             spriteShader.load("shadersGL2/BillboardSheet");
 	    } else {
             spriteShader.load("shadersGL2/Billboard");
 	    }
 		billboardShader.load("shadersGL2/Billboard");
 		trailShader.load("shadersGL2/Trail");
+        trailBillboardShader.load("shadersGL2/TrailBillboard");
 	}
 
 	sprite.getTexture().enableMipmap();
@@ -107,6 +108,7 @@ void ParticleSystem::addParticle(float force, float spectrum) {
     p.trailEndColor = trailEndColour;
     p.bTrailTaperWidth = trailTaperWidth;
     p.trailWidth = trailWidth;
+
 
     particles.push_back(p);
 
@@ -233,7 +235,7 @@ void ParticleSystem::renderTrails()
 
         trailShader.end();
     } else if ((trailType == TRAIL_LINE) || (trailType == TRAIL_TAIL)) {
-        billboardShader.begin();
+        trailBillboardShader.begin();
         ofEnablePointSprites();
 
         spriteTrail.getTexture().bind();
@@ -241,7 +243,7 @@ void ParticleSystem::renderTrails()
         spriteTrail.getTexture().unbind();
 
         ofDisablePointSprites();
-        billboardShader.end();
+        trailBillboardShader.end();
     }
 }
 

@@ -65,6 +65,7 @@ protected:
     ofShader    billboardShader;
     ofShader    spriteShader;
     ofShader    trailShader;
+    ofShader    trailBillboardShader;
 
     ofImage     sprite;
     ofImage     spriteTrail;

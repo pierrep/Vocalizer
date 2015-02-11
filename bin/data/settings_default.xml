@@ -1,9 +1,9 @@
 <ParticleSystem>
-	<SpriteDamping>0.21</SpriteDamping>
-	<SpriteLifetime>250</SpriteLifetime>
-	<SpriteScale>50.0</SpriteScale>	
+	<SpriteDamping>0.21</SpriteDamping>                <!-- friction force that slows particles down -->
+	<SpriteLifetime>250</SpriteLifetime>               <!-- how long before particles die off -->
+	<SpriteScale>50.0</SpriteScale>	                   <!-- affects size of particles -->
     <SpriteMass>50.0</SpriteMass>
-    <ForceMultiplier>100.0</ForceMultiplier>
+    <ForceMultiplier>100.0</ForceMultiplier>            <!-- affects initial force applied to particles -->
     <SpriteColour>255,255,255,255</SpriteColour>
 
     <SpriteInitialRotation>0</SpriteInitialRotation>
@@ -19,8 +19,8 @@
 	
 	<TrailType>0</TrailType>  							<!-- 0 = none, 1 = line, 2 = tail, 3 = quad tail -->
     <TrailLength>30.0</TrailLength>
-    <TrailStartColour>0,0,0,255</TrailStartColour>
+    <TrailStartColour>1,0,0,1</TrailStartColour>        <!-- trail colours are in float format (0.0 ... 1.0) not 0 - 255 -->
     <TrailEndColour>0,0,0,0</TrailEndColour>
-    <TrailWidth>6.0</TrailWidth>
-    <TrailTaperWidth>true</TrailTaperWidth>
+    <TrailWidth>6.0</TrailWidth>                        <!-- width of trails (only applies to trail 1 and 2 I think) -->
+    <TrailTaperWidth>true</TrailTaperWidth>             <!-- taper the width of the trail to zero -->
 </ParticleSystem>

@@ -25,7 +25,7 @@ void ofApp::setup() {
     audioData = new float[numOfBands];
 
     fft.setBufferSize(numOfBands);
-    fft.setup(7);
+    //fft.setup(6);
     fft.setup();
 
     bDrawGui = true;
@@ -184,7 +184,6 @@ void ofApp::loadSettings()
             p->spriteInitialRotation = xml.getValue("SpriteInitialRotation",0.0f);
             p->spriteRotationDir = xml.getValue("SpriteRotationDir",0);
             p->spriteColour = ofFromString<ofColor>(xml.getValue("SpriteColour","255,255,255,255"));
-
             p->forceMultiplier = xml.getValue("ForceMultiplier",50.0f);
             p->returnToOrigin = ofFromString<bool>(xml.getValue("ReturnToOrigin","true"));
             p->perlinNoise = ofFromString<bool>(xml.getValue("PerlinNoise","true"));
@@ -194,24 +193,17 @@ void ofApp::loadSettings()
             p->trailLength = xml.getValue("TrailLength",50.0f);
             p->trailWidth = xml.getValue("TrailWidth",6.0f);
             p->trailTaperWidth = ofFromString<bool>(xml.getValue("TrailTaperWidth","true"));
-            ofLog() << "p->trailTaperWidth=" << p->trailTaperWidth;
             p->trailStartColour = ofFromString<ofFloatColor>(xml.getValue("TrailStartColour","1.0f,1.0f,1.0f,1.0f"));
             p->trailEndColour = ofFromString<ofFloatColor>(xml.getValue("TrailEndColour","1.0f,1.0f,1.0f,1.0f"));
 
             p->spriteName = xml.getValue("SpriteName","circle.png");
-
             ParticleSystem::TrailType trailtype = (ParticleSystem::TrailType) xml.getValue("TrailType",0);
-
-            ofLog() << "TrailType = " << trailtype;
-
             p->setTrailType(trailtype);
             p->setSheetWidth(xml.getValue("SpriteSheetWidth", 1));
             p->loadResources();
 
             ps.push_back(p);
-
             xml.popTag();
-
         }
     } else {
         ofLogError() << "No particle systems found in XML file";

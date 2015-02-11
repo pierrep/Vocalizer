@@ -101,7 +101,7 @@ void Particle::update(float timeStep)
     {
         if(bReturnOrigin) {
             ofVec3f f = ofVec3f::zero() - pos;
-            addForce(f*5.0f);
+            addForce(f*2.5f);
         }
         scale *= 0.97f;
     }

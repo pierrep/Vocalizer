@@ -1,7 +1,7 @@
 <ParticleSystem>
     <SpriteName>circle.png</SpriteName>
     <SpriteDamping>0.209999993</SpriteDamping>
-    <SpriteLifetime>250.000000000</SpriteLifetime>
+    <SpriteLifetime>350.000000000</SpriteLifetime>
     <SpriteScale>30.000000000</SpriteScale>
     <SpriteMass>15.000000000</SpriteMass>
     <ForceMultiplier>100.000000000</ForceMultiplier>
@@ -15,30 +15,76 @@
     <PerlinThreshold>1.000000000</PerlinThreshold>
     <PerlinAmount>0.899999976</PerlinAmount>
     <TrailType>1</TrailType>
-    <TrailLength>30.000000000</TrailLength>
-    <TrailStartColour>255, 0, 1, 1</TrailStartColour>
-    <TrailEndColour>0, 0, 0, 1</TrailEndColour>
+    <TrailLength>5.000000000</TrailLength>
+    <TrailStartColour>1, 0, 0, 1</TrailStartColour>
+    <TrailEndColour>0, 0, 0, 0.0</TrailEndColour>
     <TrailTaperWidth>1</TrailTaperWidth>
-    <TrailWidth>6.000000000</TrailWidth>
+    <TrailWidth>8.000000000</TrailWidth>
 </ParticleSystem>
 <ParticleSystem>
     <SpriteName>flower_01.png</SpriteName>
     <SpriteDamping>0.010000000</SpriteDamping>
-    <SpriteLifetime>100.000000000</SpriteLifetime>
+    <SpriteLifetime>150.000000000</SpriteLifetime>
     <SpriteScale>30.000000000</SpriteScale>
     <SpriteMass>50.000000000</SpriteMass>
     <ForceMultiplier>10.000000000</ForceMultiplier>
     <SpriteColour>78, 255, 120, 255</SpriteColour>
     <SpriteInitialRotation>0.000000000</SpriteInitialRotation>
-    <SpriteSheetWidth>4</SpriteSheetWidth>
+    <SpriteSheetWidth>1</SpriteSheetWidth>
     <SpriteRotationDir>-1</SpriteRotationDir>
     <ReturnToOrigin>0</ReturnToOrigin>
     <SpriteAnimationSpeed>0.000000000</SpriteAnimationSpeed>
     <PerlinNoise>1</PerlinNoise>
     <PerlinThreshold>0.010000000</PerlinThreshold>
     <PerlinAmount>0.400000006</PerlinAmount>
-    <TrailType>2</TrailType>
-    <TrailLength>10.000000000</TrailLength>
+    <TrailType>3</TrailType>
+    <TrailLength>30.000000000</TrailLength>
+    <TrailStartColour>0.5, 0, 0.3, 1</TrailStartColour>
+    <TrailEndColour>0, 0, 0, 0</TrailEndColour>
+    <TrailTaperWidth>1</TrailTaperWidth>
+    <TrailWidth>5.000000000</TrailWidth>
+</ParticleSystem>
+<ParticleSystem>
+    <SpriteName>sprite-sheets/sprite_sheet_anim.png</SpriteName>
+    <SpriteDamping>0.010000000</SpriteDamping>
+    <SpriteLifetime>150.000000000</SpriteLifetime>
+    <SpriteScale>30.000000000</SpriteScale>
+    <SpriteMass>50.000000000</SpriteMass>
+    <ForceMultiplier>10.000000000</ForceMultiplier>
+    <SpriteColour>178, 25, 120, 200</SpriteColour>
+    <SpriteInitialRotation>0.000000000</SpriteInitialRotation>
+    <SpriteSheetWidth>4</SpriteSheetWidth>
+    <SpriteRotationDir>0</SpriteRotationDir>
+    <ReturnToOrigin>0</ReturnToOrigin>
+    <SpriteAnimationSpeed>2</SpriteAnimationSpeed>
+    <PerlinNoise>0</PerlinNoise>
+    <PerlinThreshold>0.010000000</PerlinThreshold>
+    <PerlinAmount>0.400000006</PerlinAmount>
+    <TrailType>0</TrailType>
+    <TrailLength>30.000000000</TrailLength>
+    <TrailStartColour>0.5, 0, 0.3, 1</TrailStartColour>
+    <TrailEndColour>0, 0, 0, 0</TrailEndColour>
+    <TrailTaperWidth>1</TrailTaperWidth>
+    <TrailWidth>5.000000000</TrailWidth>
+</ParticleSystem>
+<ParticleSystem>
+    <SpriteName>sprite-sheets/sprite_sheet1.png</SpriteName>
+    <SpriteDamping>0.010000000</SpriteDamping>
+    <SpriteLifetime>150.000000000</SpriteLifetime>
+    <SpriteScale>30.000000000</SpriteScale>
+    <SpriteMass>50.000000000</SpriteMass>
+    <ForceMultiplier>10.000000000</ForceMultiplier>
+    <SpriteColour>78, 0, 120, 255</SpriteColour>
+    <SpriteInitialRotation>0.000000000</SpriteInitialRotation>
+    <SpriteSheetWidth>2</SpriteSheetWidth>
+    <SpriteRotationDir>-1</SpriteRotationDir>
+    <ReturnToOrigin>0</ReturnToOrigin>
+    <SpriteAnimationSpeed>0</SpriteAnimationSpeed>
+    <PerlinNoise>0</PerlinNoise>
+    <PerlinThreshold>0.010000000</PerlinThreshold>
+    <PerlinAmount>0.400000006</PerlinAmount>
+    <TrailType>0</TrailType>
+    <TrailLength>30.000000000</TrailLength>
     <TrailStartColour>0.5, 0, 0.3, 1</TrailStartColour>
     <TrailEndColour>0, 0, 0, 0</TrailEndColour>
     <TrailTaperWidth>1</TrailTaperWidth>
