@@ -23,4 +23,5 @@
     <TrailEndColour>0,0,0,0</TrailEndColour>
     <TrailWidth>6.0</TrailWidth>                        <!-- width of trails (only applies to trail 1 and 2 I think) -->
     <TrailTaperWidth>true</TrailTaperWidth>             <!-- taper the width of the trail to zero -->
+    <ParticleRate>2</ParticleRate>                       <!-- rate 1..10+ where 1 = lots particle and 10 = few
 </ParticleSystem>

@@ -3,4 +3,4 @@ bin/libs
 bin/Vocalizer
 bin/Vocalizer_debug
 obj/
-
+*.DS_Store

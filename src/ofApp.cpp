@@ -9,7 +9,8 @@ ofApp::~ofApp()
 
 //--------------------------------------------------------------
 void ofApp::setup() {
-    ofBackground(253,214,1);
+    BgColour = ofColor(253,214,1);
+    
     ofSetVerticalSync(true);
     ofSeedRandom(ofGetUnixTime());
     ofEnableAntiAliasing();
@@ -40,6 +41,8 @@ void ofApp::setup() {
     setupParticles();
     rotation = 0.0f;
 
+    ofBackground(BgColour);
+
 }
 
 //--------------------------------------------------------------
@@ -58,7 +61,8 @@ void ofApp::update() {
         if (audioValue > 0.3f) {
             //add particle!
             for(unsigned int j=0; j < ps.size();j++) {
-                if(ofGetFrameNum() % 2 == 0)
+                //if(ofGetFrameNum() % 2 == 0)
+                if(ofGetFrameNum() % ps[j]->getParticleRate() == 0)
                 {
                     ps[j]->addParticle(audioValue,i/(float)numOfBands);
                 }
@@ -104,65 +108,6 @@ void ofApp::draw() {
 void ofApp::setupParticles()
 {
     loadSettings();
-
-    /*
-    ParticleSystem* p = new ParticleSystem();
-    p->spriteDamping = 0.21f;
-    p->spriteLifetime = 250;
-    p->spriteScale = 10.0f;
-    p->spriteMass = 15.0f;
-    p->spriteInitialRotation = 0.0f;
-    p->spriteRotationDir = 1;
-    p->spriteColour = ofColor(255,200,200);
-    p->forceMultiplier = 100.0f;
-    p->returnToOrigin = true;
-    p->perlinNoise = true;
-    p->perlinAmount = 0.9;
-    p->perlinThreshold = 1.0;
-    p->spriteAnimationSpeed = 0;
-    p->trailLength = 30.0f;
-    p->trailWidth = 6.0f;
-    p->trailTaperWidth = false;
-    p->trailStartColour = ofFloatColor(1,1,1,0.5);
-    p->trailEndColour = ofFloatColor(0,0,0,1);
-
-    p->spriteName = "circle.png";
-
-    p->setTrailType(ParticleSystem::TRAIL_QUADS);
-    p->setSheetWidth(1);
-    p->loadResources();
-
-    ps.push_back(p);
-
-    ParticleSystem* p2 = new ParticleSystem();
-    p2->spriteDamping = 0.01f;
-    p2->spriteLifetime = 100;
-    p2->spriteScale = 30.0f;
-    p2->spriteMass = 50.0f;
-    p2->spriteInitialRotation = 0.0f;
-    p2->spriteRotationDir = -1;
-    p2->spriteColour = ofColor(78,255,120);
-    p2->forceMultiplier = 10.0f;
-    p2->returnToOrigin = false;
-    p2->perlinNoise = true;
-    p2->perlinAmount = 0.4;
-    p2->perlinThreshold = 0.01;
-    p2->spriteAnimationSpeed = 0;
-    p2->trailLength = 30.0f;
-    p2->trailWidth = 6.0f;
-    p2->trailTaperWidth = false;
-    p2->trailStartColour = ofFloatColor(0.5,0,0.3,1);
-    p2->trailEndColour = ofFloatColor(0,0,0,0);
-
-    p2->spriteName = "flower_01.png";
-    //p2->spriteName = "sprite-sheets/sprite_sheet_anim.png";
-
-    p2->setTrailType(ParticleSystem::TRAIL_QUADS);
-    p2->setSheetWidth(4);
-    p2->loadResources();
-
-    ps.push_back(p2);
-    */
 }
 
 //--------------------------------------------------------------
@@ -170,7 +115,9 @@ void ofApp::loadSettings()
 {
 
     xml.load("settings.xml");
-
+    
+    BgColour = ofFromString<ofColor>(xml.getValue("Background","255,0,0,255"));
+    
     int numPS = xml.getNumTags("ParticleSystem");
     if(numPS > 0) {
         for (int i = 0;i < numPS;i++) {
@@ -200,6 +147,7 @@ void ofApp::loadSettings()
             ParticleSystem::TrailType trailtype = (ParticleSystem::TrailType) xml.getValue("TrailType",0);
             p->setTrailType(trailtype);
             p->setSheetWidth(xml.getValue("SpriteSheetWidth", 1));
+            p->setParticleRate(xml.getValue("ParticleRate", 1));
             p->loadResources();
 
             ps.push_back(p);
@@ -242,6 +190,7 @@ void ofApp::saveSettings()
         xml.addValue("TrailEndColour", ofToString(ps[i]->trailEndColour));
         xml.addValue("TrailTaperWidth", ofToString(ps[i]->trailTaperWidth));
         xml.addValue("TrailWidth", ps[i]->trailWidth);
+        xml.addValue("ParticleRate", ps[i]->getParticleRate());
         xml.popTag();
     }
 }

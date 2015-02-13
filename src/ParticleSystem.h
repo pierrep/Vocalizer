@@ -30,7 +30,9 @@ public:
 	void eraseParticle(int i);
 	void loadResources();
 	vector<Particle>& getParticles() {return particles;}
-
+    int getParticleRate() {return particleRate; }
+    void setParticleRate(int rate) {particleRate = rate; }
+    
     ofVboMesh billboards;
 
     /* Parameters */
@@ -74,6 +76,7 @@ protected:
 
     /* sprite sheets */
     int         totalSprites;
+    int         particleRate;
 
 
 };
