@@ -19,7 +19,7 @@
     <TrailStartColour>1, 0, 0, 1</TrailStartColour>
     <TrailEndColour>0, 0, 0, 0.0</TrailEndColour>
     <TrailTaperWidth>1</TrailTaperWidth>
-    <TrailWidth>8.000000000</TrailWidth>
+    <TrailWidth>18.000000000</TrailWidth>
 </ParticleSystem>
 <ParticleSystem>
     <SpriteName>flower_01.png</SpriteName>

@@ -12,6 +12,7 @@ class ParticleSystem {
 public:
     enum TrailType {TRAIL_NONE = 0,TRAIL_LINE,TRAIL_TAIL,TRAIL_QUADS};
 
+	~ParticleSystem();
 	ParticleSystem();
 	unsigned size() const;
 	Particle& operator[](unsigned i);

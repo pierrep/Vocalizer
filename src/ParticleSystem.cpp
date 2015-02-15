@@ -1,6 +1,14 @@
 #include "ParticleSystem.h"
 #include "Particle.h"
 
+ParticleSystem::~ParticleSystem()
+{
+	if(spriteShader.isLoaded()) spriteShader.unload();
+	if(billboardShader.isLoaded()) billboardShader.unload();
+	if(trailShader.isLoaded()) trailShader.unload();
+	if(trailBillboardShader.isLoaded()) trailBillboardShader.unload();
+}
+
 ParticleSystem::ParticleSystem() :
     spriteSheetWidth(1),
     trailType(TRAIL_NONE),
@@ -235,7 +243,7 @@ void ParticleSystem::renderTrails()
 
         trailShader.end();
     } else if ((trailType == TRAIL_LINE) || (trailType == TRAIL_TAIL)) {
-        trailBillboardShader.begin();
+       trailBillboardShader.begin();
         ofEnablePointSprites();
 
         spriteTrail.getTexture().bind();
@@ -243,7 +251,8 @@ void ParticleSystem::renderTrails()
         spriteTrail.getTexture().unbind();
 
         ofDisablePointSprites();
-        trailBillboardShader.end();
+       trailBillboardShader.end();
+		
     }
 }
 

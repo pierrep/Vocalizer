@@ -9,7 +9,8 @@
 #endif
 //========================================================================
 int main( ){
-    ofSetLogLevel(OF_LOG_VERBOSE);
+    ofSetLogLevel(OF_LOG_SILENT);
+	//ofLogToFile("myLogFile.txt", false);
 
     #ifdef USE_PROGRAMMABLE_RENDERER
     ofSetCurrentRenderer(ofGLProgrammableRenderer::TYPE);
@@ -18,7 +19,7 @@ int main( ){
     //ofAppGlutWindow window;
     //window.setGlutDisplayString("rgba double samples>=8 depth");
 	//ofSetupOpenGL(&window, 1024,768, OF_FULLSCREEN);			// <-------- setup the GL context
-	ofSetupOpenGL(1024,768, OF_FULLSCREEN);			// <-------- setup the GL context
+	ofSetupOpenGL(1024,768, OF_WINDOW);			// <-------- setup the GL context
 
 	// this kicks off the running of my app
 	// can be OF_WINDOW or OF_FULLSCREEN

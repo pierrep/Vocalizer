@@ -14,7 +14,7 @@ void ofApp::setup() {
     ofSeedRandom(ofGetUnixTime());
     ofEnableAntiAliasing();
     ofSoundStreamListDevices();
-    //ofLogToFile("myLogFile.txt", false);
+	ofToggleFullscreen();
 
     audioThreshold.set("audioThreshold", 1.0, 0.0, 1.0);
     audioPeakDecay.set("audioPeakDecay", 0.915, 0.0, 1.0);
@@ -25,10 +25,10 @@ void ofApp::setup() {
     audioData = new float[numOfBands];
 
     fft.setBufferSize(numOfBands);
-    //fft.setup(6);
-    fft.setup();
+    fft.setup(3);
+    //fft.setup();
 
-    bDrawGui = true;
+    bDrawGui = false;
     string guiPath = "audio.xml";
     gui.setup("audio", guiPath, 20, 20);
     gui.add(audioThreshold);
@@ -258,6 +258,7 @@ void ofApp::keyPressed(int key){
     if((key == 's') || (key == 'S')) {
         saveSettings();
     }
+	
 }
 
 //--------------------------------------------------------------
@@ -289,6 +290,9 @@ void ofApp::keyReleased(int key){
     if((key == 's' ) || (key == 'S')) {
         xml.save("settings.xml");
     }
+	if(key == OF_KEY_ESC) {
+		ofLog() << "esc key hit";
+	}
 }
 
 //--------------------------------------------------------------
