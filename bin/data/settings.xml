@@ -1,5 +1,6 @@
+<Background>255,100,80</Background>
 <ParticleSystem>
-    <SpriteName>circle.png</SpriteName>
+    <SpriteName>sprites/circle.png</SpriteName>
     <SpriteDamping>0.209999993</SpriteDamping>
     <SpriteLifetime>350.000000000</SpriteLifetime>
     <SpriteScale>30.000000000</SpriteScale>
@@ -20,9 +21,10 @@
     <TrailEndColour>0, 0, 0, 0.0</TrailEndColour>
     <TrailTaperWidth>1</TrailTaperWidth>
     <TrailWidth>18.000000000</TrailWidth>
+    <ParticleRate>1</ParticleRate>  
 </ParticleSystem>
 <ParticleSystem>
-    <SpriteName>flower_01.png</SpriteName>
+    <SpriteName>sprites/flower_01.png</SpriteName>
     <SpriteDamping>0.010000000</SpriteDamping>
     <SpriteLifetime>150.000000000</SpriteLifetime>
     <SpriteScale>30.000000000</SpriteScale>
@@ -43,6 +45,7 @@
     <TrailEndColour>0, 0, 0, 0</TrailEndColour>
     <TrailTaperWidth>1</TrailTaperWidth>
     <TrailWidth>5.000000000</TrailWidth>
+    <ParticleRate>2</ParticleRate>      
 </ParticleSystem>
 <ParticleSystem>
     <SpriteName>sprite-sheets/sprite_sheet_anim.png</SpriteName>
@@ -66,6 +69,7 @@
     <TrailEndColour>0, 0, 0, 0</TrailEndColour>
     <TrailTaperWidth>1</TrailTaperWidth>
     <TrailWidth>5.000000000</TrailWidth>
+    <ParticleRate>30</ParticleRate>      
 </ParticleSystem>
 <ParticleSystem>
     <SpriteName>sprite-sheets/sprite_sheet1.png</SpriteName>
@@ -89,4 +93,5 @@
     <TrailEndColour>0, 0, 0, 0</TrailEndColour>
     <TrailTaperWidth>1</TrailTaperWidth>
     <TrailWidth>5.000000000</TrailWidth>
+    <ParticleRate>6</ParticleRate>      
 </ParticleSystem>

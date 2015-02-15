@@ -5,4 +5,4 @@ bin/Vocalizer_debug
 obj/
 Vocalizer.opensdf
 Vocalizer.sdf
-
+*.DS_Store

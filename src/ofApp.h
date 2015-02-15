@@ -48,6 +48,8 @@ public:
 
     vector<ParticleSystem*> ps;
     ParticleSystem particleSystem;
+    
+    ofColor     BgColour;
 
 
     float       deltaTime;
