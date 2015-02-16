@@ -1,0 +1,97 @@
+<Background>0.1,0.3,0.5</Background>
+<ParticleSystem>
+    <SpriteName>sprites/spaceship1.png</SpriteName>
+    <SpriteDamping>0.1</SpriteDamping>
+    <SpriteLifetime>250.000000000</SpriteLifetime>
+    <SpriteScale>70.000000000</SpriteScale>
+    <SpriteMass>70.000000000</SpriteMass>
+    <ForceMultiplier>200.000000000</ForceMultiplier>
+    <SpriteColour></SpriteColour>
+    <SpriteInitialRotation>10</SpriteInitialRotation>
+    <SpriteSheetWidth>1</SpriteSheetWidth>
+    <SpriteRotationDir>1</SpriteRotationDir>
+    <ReturnToOrigin>0</ReturnToOrigin>
+    <SpriteAnimationSpeed>0.000000000</SpriteAnimationSpeed>
+    <PerlinNoise>0</PerlinNoise>
+    <PerlinThreshold>1.000000000</PerlinThreshold>
+    <PerlinAmount>0.1</PerlinAmount>
+    <TrailType>3</TrailType>
+    <TrailLength>15</TrailLength>
+    <TrailStartColour>0.06, 0.81, 1, 0.3</TrailStartColour>
+    <TrailEndColour>0.06, 0.81, 1, 0</TrailEndColour>
+    <TrailTaperWidth>0</TrailTaperWidth>
+    <TrailWidth>8.000000000</TrailWidth>
+    <ParticleRate>20</ParticleRate>  
+</ParticleSystem>
+<ParticleSystem>
+    <SpriteName>sprites/planet3.png</SpriteName>
+    <SpriteDamping>0.1</SpriteDamping>
+    <SpriteLifetime>250.000000000</SpriteLifetime>
+    <SpriteScale>70.000000000</SpriteScale>
+    <SpriteMass>70.000000000</SpriteMass>
+    <ForceMultiplier>200.000000000</ForceMultiplier>
+    <SpriteColour></SpriteColour>
+    <SpriteInitialRotation>0</SpriteInitialRotation>
+    <SpriteSheetWidth>1</SpriteSheetWidth>
+    <SpriteRotationDir>0</SpriteRotationDir>
+    <ReturnToOrigin>0</ReturnToOrigin>
+    <SpriteAnimationSpeed>0.000000000</SpriteAnimationSpeed>
+    <PerlinNoise>0</PerlinNoise>
+    <PerlinThreshold>1.000000000</PerlinThreshold>
+    <PerlinAmount>0.1</PerlinAmount>
+    <TrailType>3</TrailType>
+    <TrailLength>15</TrailLength>
+    <TrailStartColour>0.06, 0.81, 1, 0.3</TrailStartColour>
+    <TrailEndColour>0.06, 0.81, 1, 0</TrailEndColour>
+    <TrailTaperWidth>0</TrailTaperWidth>
+    <TrailWidth>8.000000000</TrailWidth>
+    <ParticleRate>40</ParticleRate>  
+</ParticleSystem>
+<ParticleSystem>
+    <SpriteName>sprites/planet1.png</SpriteName>
+    <SpriteDamping>0.1</SpriteDamping>
+    <SpriteLifetime>250.000000000</SpriteLifetime>
+    <SpriteScale>100.000000000</SpriteScale>
+    <SpriteMass>70.000000000</SpriteMass>
+    <ForceMultiplier>200.000000000</ForceMultiplier>
+    <SpriteColour></SpriteColour>
+    <SpriteInitialRotation>0</SpriteInitialRotation>
+    <SpriteSheetWidth>1</SpriteSheetWidth>
+    <SpriteRotationDir>0</SpriteRotationDir>
+    <ReturnToOrigin>0</ReturnToOrigin>
+    <SpriteAnimationSpeed>0.000000000</SpriteAnimationSpeed>
+    <PerlinNoise>0</PerlinNoise>
+    <PerlinThreshold>1.000000000</PerlinThreshold>
+    <PerlinAmount>0.1</PerlinAmount>
+    <TrailType>3</TrailType>
+    <TrailLength>15</TrailLength>
+    <TrailStartColour>0.06, 0.81, 1, 0.3</TrailStartColour>
+    <TrailEndColour>0.06, 0.81, 1, 0</TrailEndColour>
+    <TrailTaperWidth>0</TrailTaperWidth>
+    <TrailWidth>8.000000000</TrailWidth>
+    <ParticleRate>40</ParticleRate>  
+</ParticleSystem>
+<ParticleSystem>
+    <SpriteName>sprites/planet4.png</SpriteName>
+    <SpriteDamping>0.1</SpriteDamping>
+    <SpriteLifetime>250.000000000</SpriteLifetime>
+    <SpriteScale>50.000000000</SpriteScale>
+    <SpriteMass>70.000000000</SpriteMass>
+    <ForceMultiplier>200.000000000</ForceMultiplier>
+    <SpriteColour></SpriteColour>
+    <SpriteInitialRotation>20</SpriteInitialRotation>
+    <SpriteSheetWidth>1</SpriteSheetWidth>
+    <SpriteRotationDir>-1</SpriteRotationDir>
+    <ReturnToOrigin>0</ReturnToOrigin>
+    <SpriteAnimationSpeed>0.000000000</SpriteAnimationSpeed>
+    <PerlinNoise>0</PerlinNoise>
+    <PerlinThreshold>1.000000000</PerlinThreshold>
+    <PerlinAmount>0.1</PerlinAmount>
+    <TrailType>3</TrailType>
+    <TrailLength>15</TrailLength>
+    <TrailStartColour>0.06, 0.81, 1, 0.3</TrailStartColour>
+    <TrailEndColour>0.06, 0.81, 1, 0</TrailEndColour>
+    <TrailTaperWidth>0</TrailTaperWidth>
+    <TrailWidth>8.000000000</TrailWidth>
+    <ParticleRate>100</ParticleRate>  
+</ParticleSystem>

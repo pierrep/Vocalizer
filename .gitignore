@@ -6,3 +6,6 @@ obj/
 Vocalizer.opensdf
 Vocalizer.sdf
 *.DS_Store
+bin/Vocalizer_debug*
+bin/Vocalizer.*
+bin/*.dll

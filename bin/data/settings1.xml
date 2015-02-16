@@ -1,0 +1,76 @@
+<Background>251,219,0</Background>
+
+<ParticleSystem>
+    <SpriteName>sprite-sheets/Character_01_Sprite_Sheet_02.png</SpriteName>
+    <SpriteDamping>0.209999993</SpriteDamping>
+    <SpriteLifetime>350.000000000</SpriteLifetime>
+    <SpriteScale>50</SpriteScale>
+    <SpriteMass>15.000000000</SpriteMass>
+    <ForceMultiplier>100.000000000</ForceMultiplier>
+    <SpriteColour>255, 255, 255, 255</SpriteColour>
+    <SpriteInitialRotation>0.000000000</SpriteInitialRotation>
+    <SpriteSheetWidth>4</SpriteSheetWidth>
+    <SpriteRotationDir>1</SpriteRotationDir>
+    <ReturnToOrigin>1</ReturnToOrigin>
+    <SpriteAnimationSpeed>1</SpriteAnimationSpeed>
+    <PerlinNoise>1</PerlinNoise>
+    <PerlinThreshold>1.000000000</PerlinThreshold>
+    <PerlinAmount>0.899999976</PerlinAmount>
+    <TrailType>1</TrailType>
+    <TrailLength>5.000000000</TrailLength>
+    <TrailStartColour>1, 1, 1, 1</TrailStartColour>
+    <TrailEndColour>1, 1, 1, 1</TrailEndColour>
+    <TrailTaperWidth>1</TrailTaperWidth>
+    <TrailWidth>8.000000000</TrailWidth>
+    <ParticleRate>10</ParticleRate>
+</ParticleSystem>
+
+<ParticleSystem>
+    <SpriteName>sprite-sheets/Character_02_Sprite_Sheet_02.png</SpriteName>
+    <SpriteDamping>0.209999993</SpriteDamping>
+    <SpriteLifetime>350.000000000</SpriteLifetime>
+    <SpriteScale>50</SpriteScale>
+    <SpriteMass>15.000000000</SpriteMass>
+    <ForceMultiplier>100.000000000</ForceMultiplier>
+    <SpriteColour>255, 255, 255, 255</SpriteColour>
+    <SpriteInitialRotation>0.000000000</SpriteInitialRotation>
+    <SpriteSheetWidth>4</SpriteSheetWidth>
+    <SpriteRotationDir>1</SpriteRotationDir>
+    <ReturnToOrigin>1</ReturnToOrigin>
+    <SpriteAnimationSpeed>1</SpriteAnimationSpeed>
+    <PerlinNoise>1</PerlinNoise>
+    <PerlinThreshold>1.000000000</PerlinThreshold>
+    <PerlinAmount>0.899999976</PerlinAmount>
+    <TrailType>1</TrailType>
+    <TrailLength>5.000000000</TrailLength>
+    <TrailStartColour>1, 1, 1, 1</TrailStartColour>
+    <TrailEndColour>1, 1, 1, 1</TrailEndColour>
+    <TrailTaperWidth>1</TrailTaperWidth>
+    <TrailWidth>8.000000000</TrailWidth>
+    <ParticleRate>10</ParticleRate>
+</ParticleSystem>
+
+<ParticleSystem>
+    <SpriteName>sprite-sheets/Sprial_Sprite_02.png</SpriteName>
+    <SpriteDamping>0.01</SpriteDamping>
+    <SpriteLifetime>80</SpriteLifetime>
+    <SpriteScale>25</SpriteScale>
+    <SpriteMass>5</SpriteMass>
+    <ForceMultiplier>30</ForceMultiplier>
+    <SpriteColour>255, 255, 255, 255</SpriteColour>
+    <SpriteInitialRotation>0.000000000</SpriteInitialRotation>
+    <SpriteSheetWidth>4</SpriteSheetWidth>
+    <SpriteRotationDir>1</SpriteRotationDir>
+    <ReturnToOrigin>0</ReturnToOrigin>
+    <SpriteAnimationSpeed>1</SpriteAnimationSpeed>
+    <PerlinNoise>5</PerlinNoise>
+    <PerlinThreshold>1.000000000</PerlinThreshold>
+    <PerlinAmount>0.899999976</PerlinAmount>
+    <TrailType>0</TrailType>
+    <TrailLength>10</TrailLength>
+    <TrailStartColour>1, 1, 1, 1</TrailStartColour>
+    <TrailEndColour>1, 1, 1, 1</TrailEndColour>
+    <TrailTaperWidth>1</TrailTaperWidth>
+    <TrailWidth>20</TrailWidth>
+    <ParticleRate>1</ParticleRate>
+</ParticleSystem>

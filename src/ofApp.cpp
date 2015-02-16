@@ -14,8 +14,19 @@ void ofApp::setup() {
     ofSetVerticalSync(true);
     ofSeedRandom(ofGetUnixTime());
     ofEnableAntiAliasing();
-    ofSoundStreamListDevices();
+	ofHideCursor();
 	ofToggleFullscreen();
+
+	int deviceid = 0;
+	vector<ofSoundDevice> devicelist = ofSoundStreamListDevices();
+	for(int i = 0; i < devicelist.size();i++) {
+		string name = devicelist[i].name;
+		size_t found = name.find("Creative 3D Gesture Camera");
+		if (found!=std::string::npos) {
+			deviceid = devicelist[i].deviceID;
+			break;
+		}
+	}
 
     audioThreshold.set("audioThreshold", 1.0, 0.0, 1.0);
     audioPeakDecay.set("audioPeakDecay", 0.915, 0.0, 1.0);
@@ -26,8 +37,7 @@ void ofApp::setup() {
     audioData = new float[numOfBands];
 
     fft.setBufferSize(numOfBands);
-    fft.setup(3);
-    //fft.setup();
+    fft.setup(deviceid);
 
     bDrawGui = false;
     string guiPath = "audio.xml";
@@ -61,7 +71,6 @@ void ofApp::update() {
         if (audioValue > 0.3f) {
             //add particle!
             for(unsigned int j=0; j < ps.size();j++) {
-                //if(ofGetFrameNum() % 2 == 0)
                 if(ofGetFrameNum() % ps[j]->getParticleRate() == 0)
                 {
                     ps[j]->addParticle(audioValue,i/(float)numOfBands);
@@ -107,17 +116,23 @@ void ofApp::draw() {
 //--------------------------------------------------------------
 void ofApp::setupParticles()
 {
-    loadSettings();
+	loadSettings(0);
 }
 
 //--------------------------------------------------------------
-void ofApp::loadSettings()
+void ofApp::loadSettings(int i)
 {
+	for (vector< ParticleSystem* >::iterator it = ps.begin() ; it != ps.end(); ++it)
+	{
+		delete (*it);
+	} 
+	ps.clear();
 
-    xml.load("settings.xml");
-    
-    BgColour = ofFromString<ofColor>(xml.getValue("Background","255,0,0,255"));
-    
+	xml.load("settings" + ofToString(i) +".xml");
+
+	BgColour = ofFromString<ofColor>(xml.getValue("Background","255,0,0,255"));
+	ofBackground(BgColour);
+
     int numPS = xml.getNumTags("ParticleSystem");
     if(numPS > 0) {
         for (int i = 0;i < numPS;i++) {
@@ -147,7 +162,7 @@ void ofApp::loadSettings()
             ParticleSystem::TrailType trailtype = (ParticleSystem::TrailType) xml.getValue("TrailType",0);
             p->setTrailType(trailtype);
             p->setSheetWidth(xml.getValue("SpriteSheetWidth", 1));
-            p->setParticleRate(xml.getValue("ParticleRate", 1));
+			p->setParticleRate(xml.getValue("ParticleRate", 1));
             p->loadResources();
 
             ps.push_back(p);
@@ -207,7 +222,17 @@ void ofApp::keyPressed(int key){
     if((key == 's') || (key == 'S')) {
         saveSettings();
     }
-	
+
+	if(key == '1') loadSettings(1);
+	if(key == '2') loadSettings(2);
+	if(key == '3') loadSettings(3);
+	if(key == '4') loadSettings(4);
+	if(key == '5') loadSettings(5);
+	if(key == '6') loadSettings(6);
+	if(key == '7') loadSettings(7);
+	if(key == '8') loadSettings(8);
+	if(key == '9') loadSettings(9);
+	if(key == '0') loadSettings(0);
 }
 
 //--------------------------------------------------------------

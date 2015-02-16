@@ -25,7 +25,7 @@ public:
     void gotMessage(ofMessage msg);
     void drawGUI();
     void updateFFT();
-    void loadSettings();
+    void loadSettings(int i);
     void saveSettings();
 
     void setupParticles();
